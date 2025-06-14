@@ -20,39 +20,37 @@ const TemplateScreen = () => (
       backgroundColor: theme => theme.palette.background.default,
       color: theme => theme.palette.text.primary,
       fontFamily: theme => theme.typography.fontFamily,
-      overflowY: 'scroll'
+      overflowY: 'auto'
     }}
   >
     {/* Typography */}
-    <Stack spacing={1}>
-      <Typography variant="h4">Heading 1</Typography>
-      <Typography variant="h5">Heading 2</Typography>
-      <Typography variant="body1">This is a paragraph of normal text.</Typography>
-      <Typography variant="body2" color="text.secondary">This is secondary text.</Typography>
+    <Stack spacing={2}>
+      <Typography variant="h4">Überschrift 1</Typography>
+      <Typography variant="h5">Überschrift 2</Typography>
+      <Typography variant="body1">Das ist normaler Text.</Typography>
+      <Typography variant="body2" color="text.secondary">Das ist sekundärer Text.</Typography>
     </Stack>
 
     {/* Buttons */}
-    <Stack direction="row" spacing={2}>
-      <Button variant="contained" color="primary">Primary Button</Button>
-      <Button variant="outlined" color="secondary">Secondary Button</Button>
+    <Stack direction="row" spacing={2} my={2}>
+      <Button variant="contained" size="medium" color="primary">Normaler Button</Button>
+      <Button variant="outlined" size="medium" color="secondary">Sekundärer Button</Button>
     </Stack>
 
     {/* Inputs */}
     <Stack spacing={2} maxWidth={400}>
       <TextField label="Text input" variant="outlined" fullWidth />
-      <TextField label="Number input" type="number" variant="outlined" fullWidth />
-      <TextField label="Textarea" multiline rows={3} variant="outlined" fullWidth />
+      <TextField label="Zahl input" type="number" variant="outlined" fullWidth />
     </Stack>
 
     {/* Checkboxes */}
-    <Stack spacing={1}>
-      <FormControlLabel control={<Checkbox />} label="Stress" />
-      <FormControlLabel control={<Checkbox />} label="Dehydration" />
+    <Stack spacing={2}>
+      <FormControlLabel control={<Checkbox color="secondary" />} label="Stress" />
     </Stack>
 
     {/* Text Highlight */}
-    <Stack spacing={1}>
-      <Typography variant="h6">Note</Typography>
+    <Stack spacing={2} my={2}>
+      <Typography variant="h6">Notiz</Typography>
       <Paper
         elevation={0}
         sx={{
@@ -60,36 +58,16 @@ const TemplateScreen = () => (
           color: theme => theme.palette.secondary.contrastText,
           padding: 2,
           borderRadius: 2,
-          fontSize: '0.95rem',
+          fontSize: '1rem',
           lineHeight: 1.5
         }}
       >
-        This is a highlighted note or text box.
+        Das ist ein hervorgehobener Text oder eine Text-Box.
       </Paper>
     </Stack>
 
     {/* Slider */}
-    <Stack spacing={0}>
-      <Typography variant="h6">Schmerz Intensität</Typography>
-      <CustomSlider />
-    </Stack>
-    <Stack spacing={0}>
-      <Typography variant="h6">Schmerz Intensität</Typography>
-      <CustomSlider />
-    </Stack>
-    <Stack spacing={0}>
-      <Typography variant="h6">Schmerz Intensität</Typography>
-      <CustomSlider />
-    </Stack>
-    <Stack spacing={0}>
-      <Typography variant="h6">Schmerz Intensität</Typography>
-      <CustomSlider />
-    </Stack>
-    <Stack spacing={0}>
-      <Typography variant="h6">Schmerz Intensität</Typography>
-      <CustomSlider />
-    </Stack>
-    <Stack spacing={0}>
+    <Stack spacing={2} my={2}>
       <Typography variant="h6">Schmerz Intensität</Typography>
       <CustomSlider />
     </Stack>
