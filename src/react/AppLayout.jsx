@@ -12,9 +12,9 @@ import {
 } from '@mui/material'
 
 import {
-  HealthAndSafety as HomeIcon,
-  Pets as CatIcon,
-  Person4 as ProfileIcon
+  Home,
+  AddCircle as PlusCircle,
+  BarChart as Statistics
 } from '@mui/icons-material'
 
 import AppRoutes from './AppRoutes'
@@ -28,8 +28,8 @@ const AppLayout = () => {
   const navigate = useNavigate()
 
   let navigationIndex = 0
-  if (location.pathname.startsWith('/catnames')) navigationIndex = 1
-  if (location.pathname.startsWith('/profile')) navigationIndex = 2
+  if (location.pathname.startsWith('/track-migraine')) navigationIndex = 1
+  if (location.pathname.startsWith('/statistics')) navigationIndex = 2
 
   return (
     <Stack
@@ -99,22 +99,41 @@ const AppLayout = () => {
             <BottomNavigation
               showLabels
               value={navigationIndex}
-              sx={{ width: '100%' }}
+              sx={{
+                width: '100%',
+                '& .MuiBottomNavigationAction-label': {
+                  fontSize: '0.9rem'
+                },
+                // Label and icon color for selected
+                '& .Mui-selected': {
+                  color: 'secondary.main'
+                },
+                '& .Mui-selected .MuiSvgIcon-root': {
+                  color: 'secondary.main'
+                }
+              }}
             >
               <BottomNavigationAction
                 label="Home"
-                icon={<HomeIcon />}
+                icon={<Home />}
                 onClick={() => navigate('/')}
               />
               <BottomNavigationAction
-                label="Cat Names"
-                icon={<CatIcon />}
-                onClick={() => navigate('/catnames')}
+                label="Neue Attacke"
+                icon={<PlusCircle />}
+                onClick={() => navigate('/track-migraine')}
+                sx={{
+                  mt: -3,
+                  height: 70,
+                  '& .MuiSvgIcon-root': {
+                    fontSize: 55
+                  }
+                }}
               />
               <BottomNavigationAction
-                label="Profile"
-                icon={<ProfileIcon />}
-                onClick={() => navigate('/profile')}
+                label="Statistik"
+                icon={<Statistics />}
+                onClick={() => navigate('/statistics')}
               />
             </BottomNavigation>
           </Stack>
