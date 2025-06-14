@@ -18,7 +18,7 @@ const CustomSlider = () => {
 
   return (
     // Width of both items (slider and text box)
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, width: 375 }}>
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, width: '100%' }}>
       <Slider
         value={value}
         onChange={handleSliderChange}
