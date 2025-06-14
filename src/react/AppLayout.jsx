@@ -17,6 +17,8 @@ import {
   BarChart as Statistics
 } from '@mui/icons-material'
 
+import NavigationMenu from './Components/NavigationMenu'
+
 import AppRoutes from './AppRoutes'
 
 import AppLogo from '../assets/favicon.svg'
@@ -95,16 +97,29 @@ const AppLayout = () => {
               background: theme => theme.palette.background.paper
             }}
           >
+            <Stack
+              direction="row"
+              alignItems="right"
+              justifyContent="flex-end"
+              padding={1}
+              width="100%"
+              sx={{
+                backgroundColor: 'transparent'
+              }}
+            >
+              <NavigationMenu />
+            </Stack>
             <AppRoutes />
             <BottomNavigation
               showLabels
               value={navigationIndex}
               sx={{
                 width: '100%',
+                // Increase font size
                 '& .MuiBottomNavigationAction-label': {
                   fontSize: '0.9rem'
                 },
-                // Label and icon color for selected
+                // Set label and icon color for selected
                 '& .Mui-selected': {
                   color: 'secondary.main'
                 },
