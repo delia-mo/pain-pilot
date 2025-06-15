@@ -28,7 +28,7 @@ const AppLayout = () => {
   const navigate = useNavigate()
 
   let navigationIndex = 0
-  if (location.pathname.startsWith('/track-migraine')) navigationIndex = 1
+  if (location.pathname.startsWith('/add-migraine')) navigationIndex = 1
   if (location.pathname.startsWith('/statistics')) navigationIndex = 2
 
   return (
@@ -135,7 +135,7 @@ const AppLayout = () => {
               <BottomNavigationAction
                 label="Neue Attacke"
                 icon={<PlusCircle />}
-                onClick={() => navigate('/track-migraine')}
+                onClick={() => navigate('/add-migraine')}
                 // Increase icon
                 sx={{
                   mt: -3,

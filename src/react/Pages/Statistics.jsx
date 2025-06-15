@@ -4,7 +4,7 @@ import {
   Stack
 } from '@mui/material'
 
-const Home = () => (
+const Statistics = () => (
   <Stack
     sx={{
       width: '100%',
@@ -18,4 +18,4 @@ const Home = () => (
   />
 )
 
-export default Home
+export default Statistics
