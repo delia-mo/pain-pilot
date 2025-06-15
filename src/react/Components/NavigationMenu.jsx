@@ -47,20 +47,20 @@ const MenuDrawer = ({ open }) => {
         </Toolbar>
         <Box sx={{ px: 1, py: 2 }}>
           <List>
-            <ListItem button onClick={handleNavigate('/home')}>
-              <ListItemText primary="Home" />
+            <ListItem button onClick={handleNavigate('/')}>
+              <ListItemText primary="Home" sx={{ cursor: 'pointer' }} />
             </ListItem>
-            <ListItem button onClick={handleNavigate('/track-migraine')}>
-              <ListItemText primary="Neue Attacke" />
+            <ListItem button onClick={handleNavigate('/add-migraine')}>
+              <ListItemText primary="Neue Attacke" sx={{ cursor: 'pointer' }} />
             </ListItem>
             <ListItem button onClick={handleNavigate('/statistics')}>
-              <ListItemText primary="Statistik" />
+              <ListItemText primary="Statistik" sx={{ cursor: 'pointer' }} />
             </ListItem>
             <ListItem button onClick={handleNavigate('/settings')}>
-              <ListItemText primary="Einstellungen" />
+              <ListItemText primary="Einstellungen" sx={{ cursor: 'pointer' }} />
             </ListItem>
             <ListItem button onClick={handleNavigate('/info')}>
-              <ListItemText primary="Informationen" />
+              <ListItemText primary="Informationen" sx={{ cursor: 'pointer' }} />
             </ListItem>
           </List>
         </Box>
