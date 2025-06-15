@@ -17,8 +17,6 @@ import {
   BarChart as Statistics
 } from '@mui/icons-material'
 
-import NavigationMenu from './Components/NavigationMenu'
-
 import AppRoutes from './AppRoutes'
 
 import AppLogo from '../assets/favicon.svg'
@@ -74,6 +72,7 @@ const AppLayout = () => {
         <Paper
           elevation={6}
           sx={{
+            position: 'relative',
             flex: '1 1 auto',
             display: 'flex',
             flexDirection: 'column',
@@ -81,6 +80,7 @@ const AppLayout = () => {
             paddingRight: 1,
             paddingBottom: 2,
             paddingLeft: 1,
+            zIndex: 10000,
             overflow: 'hidden',
             borderRadius: theme => theme.spacing(borderRadius),
             background: theme => theme.palette.grey[900]
@@ -97,18 +97,17 @@ const AppLayout = () => {
               background: theme => theme.palette.background.paper
             }}
           >
+
             <Stack
               direction="row"
               alignItems="right"
               justifyContent="flex-end"
-              padding={1}
+              padding={3}
               width="100%"
               sx={{
-                backgroundColor: 'transparent'
+                backgroundColor: '#070f2b'
               }}
-            >
-              <NavigationMenu />
-            </Stack>
+            />
             <AppRoutes />
             <BottomNavigation
               showLabels

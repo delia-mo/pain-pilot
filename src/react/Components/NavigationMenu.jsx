@@ -1,59 +1,71 @@
+import React from 'react'
 import {
-  Drawer,
+  Box,
+  Slide,
+  Toolbar,
   List,
   ListItem,
   ListItemText,
-  IconButton,
-  Toolbar
+  Typography
 } from '@mui/material'
-import MenuIcon from '@mui/icons-material/Menu'
 
-import React, { useState } from 'react'
 import { useNavigate } from 'react-router'
+import PropTypes from 'prop-types'
 
-const NavigationMenu = () => {
-  const [open, setOpen] = useState(false)
+const MenuDrawer = ({ open }) => {
   const navigate = useNavigate()
-
-  const handleToggleDrawer = () => setOpen(prev => !prev)
 
   const handleNavigate = (path) => () => {
     navigate(path)
-    setOpen(false)
   }
 
   return (
-    <>
-      <IconButton onClick={() => setOpen(true)} edge="start" color="inherit">
-        <MenuIcon />
-      </IconButton>
-
-      <Drawer
-        anchor="right"
-        open={open}
-        onClose={handleToggleDrawer}
+    <Slide direction="left" in={open} mountOnEnter unmountOnExit>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 64,
+          right: 8,
+          height: '91%',
+          width: 240,
+          bgcolor: 'background.paper',
+          boxShadow: 3,
+          zIndex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          padding: 3
+        }}
       >
-        <Toolbar />
-        <List sx={{ width: 250 }}>
-          <ListItem button onClick={handleNavigate('/home')}>
-            <ListItemText primary="Home" />
-          </ListItem>
-          <ListItem button onClick={handleNavigate('/track-migraine')}>
-            <ListItemText primary="Neue Attacke" />
-          </ListItem>
-          <ListItem button onClick={handleNavigate('/statistics')}>
-            <ListItemText primary="Statistik" />
-          </ListItem>
-          <ListItem button onClick={handleNavigate('/settings')}>
-            <ListItemText primary="Einstellungen" />
-          </ListItem>
-          <ListItem button onClick={handleNavigate('/info')}>
-            <ListItemText primary="Informationen" />
-          </ListItem>
-        </List>
-      </Drawer>
-    </>
+        <Toolbar variant="dense" sx={{ justifyContent: 'space-between' }}>
+          <Typography variant="h6">Menü</Typography>
+        </Toolbar>
+        <Box sx={{ px: 2, py: 1 }}>
+          <List sx={{ width: 250 }}>
+            <ListItem button onClick={handleNavigate('/home')}>
+              <ListItemText primary="Home" />
+            </ListItem>
+            <ListItem button onClick={handleNavigate('/track-migraine')}>
+              <ListItemText primary="Neue Attacke" />
+            </ListItem>
+            <ListItem button onClick={handleNavigate('/statistics')}>
+              <ListItemText primary="Statistik" />
+            </ListItem>
+            <ListItem button onClick={handleNavigate('/settings')}>
+              <ListItemText primary="Einstellungen" />
+            </ListItem>
+            <ListItem button onClick={handleNavigate('/info')}>
+              <ListItemText primary="Informationen" />
+            </ListItem>
+          </List>
+        </Box>
+      </Box>
+    </Slide>
   )
 }
 
-export default NavigationMenu
+// Define prop types for `open`
+MenuDrawer.propTypes = {
+  open: PropTypes.bool.isRequired
+}
+
+export default MenuDrawer
