@@ -8,11 +8,12 @@ const TopMenuBar = ({ onMenuClick }) => (
   <AppBar
     position="absolute"
     sx={{
+      // top, left and width are set so that the border of the phone is respected
       top: 16,
       left: 8,
       width: '96.4%',
       zIndex: 1,
-      backgroundColor: 'transparent',
+      backgroundColor: 'background.default',
       elevation: 0,
       overflow: 'hidden',
       borderTopLeftRadius: (theme) => theme.spacing(6),

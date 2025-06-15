@@ -27,6 +27,7 @@ const CustomSlider = () => {
         step={1}
         valueLabelDisplay="auto"
         size="small"
+        color="secondary.light"
         sx={{ flexGrow: 1 }}
       />
       <TextField

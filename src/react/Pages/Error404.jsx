@@ -12,7 +12,7 @@ const Error404 = () => (
       variant="h5"
       color="error"
     >
-      View is missing ... sorry!
+      Seite nicht gefunden
     </Typography>
   </Stack>
 )

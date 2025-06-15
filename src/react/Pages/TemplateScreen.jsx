@@ -42,11 +42,11 @@ const TemplateScreen = () => (
     </Stack>
     {/* Checkboxes */}
     <Stack spacing={2}>
-      <FormControlLabel control={<Checkbox color="secondary" />} label="Stress" />
+      <FormControlLabel control={<Checkbox color="secondary" />} label="Checkbox" />
     </Stack>
     {/* Text Highlight */}
     <Stack spacing={2} my={2}>
-      <Typography variant="h6">Notiz</Typography>
+      <Typography variant="h7">Notiz</Typography>
       <Paper
         elevation={0}
         sx={{
@@ -63,7 +63,7 @@ const TemplateScreen = () => (
     </Stack>
     {/* Slider */}
     <Stack spacing={2} my={2}>
-      <Typography variant="h6">Schmerz Intensität</Typography>
+      <Typography variant="h7">Schmerz Intensität</Typography>
       <CustomSlider />
     </Stack>
   </Stack>

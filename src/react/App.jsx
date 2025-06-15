@@ -10,6 +10,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import AppLayout from './AppLayout'
 
 const theme = createTheme({
+  // Define colors
   palette: {
     mode: 'dark',
     primary: {
@@ -33,6 +34,7 @@ const theme = createTheme({
       secondary: '#9290c3'
     }
   },
+  // Define font
   typography: {
     fontFamily: '"Roboto", sans-serif',
     h4: {

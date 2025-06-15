@@ -80,7 +80,7 @@ const AppLayout = () => {
             paddingRight: 1,
             paddingBottom: 2,
             paddingLeft: 1,
-            zIndex: 10000,
+            zIndex: 10,
             overflow: 'hidden',
             borderRadius: theme => theme.spacing(borderRadius),
             background: theme => theme.palette.grey[900]
@@ -105,7 +105,7 @@ const AppLayout = () => {
               padding={3}
               width="100%"
               sx={{
-                backgroundColor: '#070f2b'
+                backgroundColor: 'background.default'
               }}
             />
             <AppRoutes />
@@ -136,6 +136,7 @@ const AppLayout = () => {
                 label="Neue Attacke"
                 icon={<PlusCircle />}
                 onClick={() => navigate('/track-migraine')}
+                // Increase icon
                 sx={{
                   mt: -3,
                   height: 70,
