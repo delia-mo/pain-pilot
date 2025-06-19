@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 
 import {
   Stack,
@@ -12,26 +12,53 @@ import { useNavigate } from 'react-router'
 import { DateContext } from '../Context/DateContext'
 import DayCard from '../Components/Home/DayCard'
 
-const dayData = [
-  { date: '2025-06-17', status: 0 },
-  { date: '2025-06-16', status: 1 },
-  { date: '2025-06-17', status: 2 },
-  { date: '2025-06-16', status: 3 },
-  { date: '2025-06-17', status: 4 },
-  { date: '2025-06-16', status: 5 },
-  { date: '2025-06-01', status: 6 }
-]
+function getDateNDaysBefore(dateStr, n) {
+  const date = new Date(dateStr)
+  date.setDate(date.getDate() - n)
+  return date.toISOString().slice(0, 10) // 'YYYY-MM-DD'
+}
+
+function getStatusForDate(date) {
+  for (let i = 0; i < localStorage.length; i++) {
+    const value = localStorage.getItem(localStorage.key(i))
+    if (value?.startsWith('loggin;')) {
+      const parts = value.split(';')
+      const datePart = parts.find(p => p.startsWith('date:'))
+      const statusPart = parts.find(p => p.startsWith('status:'))
+      const entryDate = datePart?.split(':')[1]
+      if (entryDate === date) {
+        const status = parseInt(statusPart?.split(':')[1], 10)
+        if (!Number.isNaN(status)) return status
+      }
+    }
+  }
+  return 6 // Standard-Status, wenn kein Eintrag gefunden
+}
 
 const Home = () => {
   const { todayStr } = useContext(DateContext)
   const scrollRef = useRef(null)
   const navigate = useNavigate()
+  const [logData, setLogData] = useState([])
+
+  useEffect(() => {
+    const daysToShow = 7
+    const data = []
+
+    for (let i = daysToShow; i >= 1; i--) {
+      const day = getDateNDaysBefore(todayStr, i)
+      const status = getStatusForDate(day)
+      data.push({ date: day, status })
+    }
+
+    setLogData(data)
+  }, [todayStr])
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollLeft = scrollRef.current.scrollWidth
     }
-  }, [])
+  }, [logData])
 
   return (
     <Stack
@@ -58,8 +85,9 @@ const Home = () => {
           paddingBottom: 1
         }}
       >
-        {dayData.map(day => (
+        {logData.map(day => (
           <DayCard
+            key={day.date}
             date={day.date}
             todayStr={todayStr}
             status={day.status}
