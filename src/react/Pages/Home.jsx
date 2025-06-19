@@ -3,8 +3,11 @@ import React, { useContext, useEffect, useRef } from 'react'
 import {
   Stack,
   Box,
-  Typography
+  Typography,
+  Button
 } from '@mui/material'
+
+import { useNavigate } from 'react-router'
 
 import { DateContext } from '../Context/DateContext'
 import DayCard from '../Components/Home/DayCard'
@@ -18,6 +21,7 @@ const dayData = [
 const Home = () => {
   const { todayStr } = useContext(DateContext)
   const scrollRef = useRef(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -37,9 +41,8 @@ const Home = () => {
         overflowY: 'auto'
       }}
     >
-      <Typography variant="h5" sx={{ mb: 2 }}>
-        Heute ist:
-        {todayStr}
+      <Typography variant="h4" sx={{ mb: 2 }}>
+        Hallo!
       </Typography>
 
       <Box
@@ -58,6 +61,23 @@ const Home = () => {
           />
         ))}
       </Box>
+
+      <Button
+        variant="contained"
+        size="medium"
+        color="primary"
+        onClick={() => navigate('/add-migraine')}
+        sx={{
+          mt: 2,
+          mb: 2,
+          textTransform: 'none',
+          width: 'fit-content',
+          alignSelf: 'center'
+        }}
+      >
+        Wie fühlst du dich heute?
+      </Button>
+
     </Stack>
   )
 }
