@@ -5,14 +5,22 @@ import {
   Typography
 } from '@mui/material'
 
-const gradients = {
-  0: ['#1e1c87', '#1b1a55'],
-  1: ['#2c2a9c', '#1e1c87'],
-  2: ['#4643b2', '#2c2a9c'],
-  3: ['#635fc3', '#4643b2'],
-  4: ['#7c77d4', '#635fc3'],
-  5: ['#9994e6', '#7c77d4'],
-  6: ['#364a96', '#1b1a55']
+import bild0 from '../../../assets/bild-0.svg'
+import bild1 from '../../../assets/bild-1.svg'
+import bild2 from '../../../assets/bild-2.svg'
+import bild3 from '../../../assets/bild-3.svg'
+import bild4 from '../../../assets/bild-4.svg'
+import bild5 from '../../../assets/bild-5.svg'
+import bild6 from '../../../assets/bild-6.svg'
+
+const images = {
+  0: bild0,
+  1: bild1,
+  2: bild2,
+  3: bild3,
+  4: bild4,
+  5: bild5,
+  6: bild6
 }
 
 const formatDate = (dateStr) => {
@@ -22,19 +30,24 @@ const formatDate = (dateStr) => {
   return `${day}.${month}.`
 }
 
-
 const DayCard = ({ date, status }) => {
-  const gradient = gradients[status] || gradients[6]
+  const safeStatus = [0, 1, 2, 3, 4, 5].includes(status) ? status : 6
+
   return (
     <Card
       sx={{
         minWidth: 100,
         minHeight: 350,
-        background: `radial-gradient(circle at top left, ${gradient[0]}, ${gradient[1]}, ${gradient[0]})`,
+        backgroundImage: `url(${images[safeStatus]})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
         color: '#cac7fc',
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+        position: 'relative',
+        paddingBottom: 1
       }}
     >
       <Typography
