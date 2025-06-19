@@ -13,9 +13,13 @@ import { DateContext } from '../Context/DateContext'
 import DayCard from '../Components/Home/DayCard'
 
 const dayData = [
-  { date: '2025-06-17' },
-  { date: '2025-06-16' },
-  { date: '2025-06-01' }
+  { date: '2025-06-17', status: 0 },
+  { date: '2025-06-16', status: 1 },
+  { date: '2025-06-17', status: 2 },
+  { date: '2025-06-16', status: 3 },
+  { date: '2025-06-17', status: 4 },
+  { date: '2025-06-16', status: 5 },
+  { date: '2025-06-01', status: 6 }
 ]
 
 const Home = () => {
@@ -41,7 +45,7 @@ const Home = () => {
         overflowY: 'auto'
       }}
     >
-      <Typography variant="h4" sx={{ mb: 2 }}>
+      <Typography variant="h4" sx={{ mt: 3, mb: 3 }}>
         Hallo!
       </Typography>
 
@@ -58,6 +62,7 @@ const Home = () => {
           <DayCard
             date={day.date}
             todayStr={todayStr}
+            status={day.status}
           />
         ))}
       </Box>
@@ -68,7 +73,7 @@ const Home = () => {
         color="primary"
         onClick={() => navigate('/add-migraine')}
         sx={{
-          mt: 2,
+          mt: 3,
           mb: 2,
           textTransform: 'none',
           width: 'fit-content',
