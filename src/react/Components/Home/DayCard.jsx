@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import {
   Card,
@@ -30,12 +31,14 @@ const formatDate = (dateStr) => {
   return `${day}.${month}.`
 }
 
-const DayCard = ({ date, status }) => {
+const DayCard = ({ date, status, onClick }) => {
   const safeStatus = [0, 1, 2, 3, 4, 5].includes(status) ? status : 6
 
   return (
     <Card
+      onClick={onClick}
       sx={{
+        cursor: 'pointer',
         minWidth: 100,
         minHeight: 350,
         backgroundImage: `url(${images[safeStatus]})`,
@@ -61,6 +64,12 @@ const DayCard = ({ date, status }) => {
 
     </Card>
   )
+}
+
+DayCard.propTypes = {
+  date: PropTypes.string.isRequired,
+  status: PropTypes.number.isRequired,
+  onClick: PropTypes.func
 }
 
 export default DayCard

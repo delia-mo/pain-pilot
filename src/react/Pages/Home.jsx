@@ -89,8 +89,8 @@ const Home = () => {
           <DayCard
             key={day.date}
             date={day.date}
-            todayStr={todayStr}
             status={day.status}
+            onClick={() => navigate(`/updateDay/${day.date}`)}
           />
         ))}
       </Box>
