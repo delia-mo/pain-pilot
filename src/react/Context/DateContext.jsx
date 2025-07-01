@@ -19,7 +19,7 @@ export const DateProvider = ({ children }) => {
   const value = useMemo(() => ({ todayStr }), [todayStr])
 
   return (
-    // DateContext.Provider stellt aktuelles Datum zur Verfügung 
+    // DateContext.Provider stellt aktuelles Datum zur Verfügung
     <DateContext.Provider value={value}>
       {children}
     </DateContext.Provider>

@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router'
 import { DateContext } from '../Context/DateContext'
 import DayCard from '../Components/Home/DayCard'
 
-function getDateNDaysBefore(dateStr, n) {
+function getDaysBeforeDate(dateStr, n) {
   const date = new Date(dateStr)
   date.setDate(date.getDate() - n)
   return date.toISOString().slice(0, 10) // 'YYYY-MM-DD'
@@ -32,7 +32,7 @@ function getStatusForDate(date) {
       }
     }
   }
-  return 6 // Standard-Status, wenn kein Eintrag gefunden
+  return 6
 }
 
 const Home = () => {
@@ -41,12 +41,13 @@ const Home = () => {
   const navigate = useNavigate()
   const [logData, setLogData] = useState([])
 
+  // Aktualisieren der Anzeige wg Datum
   useEffect(() => {
     const daysToShow = 7
     const data = []
 
     for (let i = daysToShow; i >= 1; i--) {
-      const day = getDateNDaysBefore(todayStr, i)
+      const day = getDaysBeforeDate(todayStr, i)
       const status = getStatusForDate(day)
       data.push({ date: day, status })
     }
@@ -54,6 +55,7 @@ const Home = () => {
     setLogData(data)
   }, [todayStr])
 
+  // Scrollen von rechts
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollLeft = scrollRef.current.scrollWidth
