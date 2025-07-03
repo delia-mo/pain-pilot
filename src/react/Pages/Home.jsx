@@ -21,7 +21,7 @@ function getDaysBeforeDate(dateStr, n) {
 function getStatusForDate(date) {
   for (let i = 0; i < localStorage.length; i++) {
     const value = localStorage.getItem(localStorage.key(i))
-    if (value?.startsWith('loggin;')) {
+    if (value?.startsWith('logging;')) {
       const parts = value.split(';')
       const datePart = parts.find(p => p.startsWith('date:'))
       const statusPart = parts.find(p => p.startsWith('status:'))
