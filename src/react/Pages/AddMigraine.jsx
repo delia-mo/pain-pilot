@@ -1,15 +1,10 @@
-import React from 'react'
-
-import {
-  Stack,
-  Typography,
-  Button
-} from '@mui/material'
-
-import { useNavigate } from 'react-router'
+import React, { useState } from 'react'
+import { Stack, Button } from '@mui/material'
+import DailyLogModal from '../Components/DailyLogModal'
 
 const AddMigraine = () => {
-  const navigate = useNavigate()
+  const [modalOpen, setModalOpen] = useState(true)
+  const today = new Date().toISOString().split('T')[0]
 
   return (
     <Stack
@@ -21,37 +16,22 @@ const AddMigraine = () => {
         color: theme => theme.palette.text.primary,
         fontFamily: theme => theme.typography.fontFamily,
         overflowY: 'auto',
-        justifyFlowY: 'auto',
         justifyContent: 'center',
         alignItems: 'center'
       }}
     >
+      <Button
+        variant="contained"
+        onClick={() => setModalOpen(true)}
+      >
+        Tägliches Logging öffnen
+      </Button>
 
-      <Stack spacing={4} alignItems="center">
-        <Typography variant="h4" textAlign="center">
-          Hast du heute Migräne?
-        </Typography>
-        <Stack direction="row" spacing={3}>
-          <Button
-            variant="contained"
-            color="primary"
-            size="medium"
-            onClick={() => navigate('/migrainLog')}
-            sx={{ textTransform: 'none' }}
-          >
-            Ja
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            size="medium"
-            onClick={() => navigate('/tracking')}
-            sx={{ textTransform: 'none' }}
-          >
-            Nein
-          </Button>
-        </Stack>
-      </Stack>
+      <DailyLogModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        date={today}
+      />
     </Stack>
   )
 }
