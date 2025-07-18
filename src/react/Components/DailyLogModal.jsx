@@ -12,8 +12,8 @@ const DailyLogModal = ({ date, open, onClose }) => {
 
   useEffect(() => {
     if (!open) return
-    const migraine = JSON.parse(localStorage.getItem(`migraine-${date}`) || 'null')
-    const tracking = JSON.parse(localStorage.getItem(`tracking-${date}`) || 'null')
+    const migraine = JSON.parse(localStorage.getItem(`migraine-${date}`) || undefined)
+    const tracking = JSON.parse(localStorage.getItem(`tracking-${date}`) || undefined)
     setMigraineData(migraine)
     setTrackingData(tracking)
     setStep(0)
