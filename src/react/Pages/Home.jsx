@@ -46,10 +46,19 @@ const Home = () => {
     const daysToShow = 7
     const data = []
 
-    for (let i = daysToShow; i >= 1; i--) {
-      const day = getDaysBeforeDate(todayStr, i)
+    const todayStatus = getStatusForDate(todayStr)
+    const includeToday = todayStatus !== 6 // 6 = kein Eintrag gefunden
+
+    for (let i = daysToShow - 1; i >= 0; i--) {
+      const offset = includeToday ? i : i + 1
+      const day = getDaysBeforeDate(todayStr, offset)
       const status = getStatusForDate(day)
       data.push({ date: day, status })
+    }
+
+    if (includeToday) {
+      // Heute ganz zum Schluss einfügen
+      data.push({ date: todayStr, status: todayStatus })
     }
 
     setLogData(data)
