@@ -14,6 +14,7 @@ import TemplateScreen from './Pages/TemplateScreen'
 import MigrainLog from './Pages/MigrainLog'
 import Tracking from './Pages/Tracking'
 import UpdateDay from './Pages/UpdateDay'
+import HandleData from './Pages/HandleData'
 
 const AppRoute = () => {
   // Standard: Drawer closed
@@ -33,6 +34,7 @@ const AppRoute = () => {
         <Route path="/migrainLog" element={<MigrainLog />} />
         <Route path="/tracking" element={<Tracking />} />
         <Route path="/updateDay/:date" element={<UpdateDay />} />
+        <Route path="/handle-data" element={<HandleData />} />
         <Route path="*" element={<Error404 />} />
       </Routes>
       <NavigationMenu open={drawerOpen} onClose={() => setDrawerOpen(false)} />
