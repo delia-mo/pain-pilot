@@ -27,7 +27,7 @@ const MigraineForm = ({ defaultData = {}, onSave, onSkip }) => {
   return (
     <Box sx={{ padding: 2 }}>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button variant="outlined" onClick={onSkip}>
+        <Button variant="contained" onClick={onSkip}>
           Skip
         </Button>
       </Box>
@@ -63,7 +63,13 @@ const MigraineForm = ({ defaultData = {}, onSave, onSkip }) => {
                 onChange={handleChange}
               />
             }
-            label={field.charAt(0).toUpperCase() + field.slice(1)}
+            label={{
+              aura: 'Aura',
+              uebelkeit: 'Übelkeit',
+              taubheit: 'Taubheit',
+              sprechen: 'Schwierigkeiten beim Sprechen',
+              muskel: 'Muskelschmerzen oder -zucken'
+            }[field]}
           />
         ))}
       </FormGroup>
