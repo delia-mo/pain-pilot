@@ -41,7 +41,7 @@ const DayCard = ({ date, status, onClick }) => {
       sx={{
         cursor: 'pointer',
         minWidth: 100,
-        minHeight: 340,
+        minHeight: 300,
         backgroundImage: `url(${images[safeStatus]})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
@@ -51,7 +51,7 @@ const DayCard = ({ date, status, onClick }) => {
         alignItems: 'flex-end',
         justifyContent: 'center',
         position: 'relative',
-        paddingBottom: 1
+        paddingBottom: 0.5
       }}
     >
       <Typography
@@ -68,13 +68,14 @@ const DayCard = ({ date, status, onClick }) => {
         <Box
           sx={{
             position: 'absolute',
-            top: 8,
-            right: 8,
-            width: 24,
-            height: 24,
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 28,
+            height: 28,
             borderRadius: '50%',
             backgroundColor: 'rgba(120, 130, 255, 0.4)',
-            color: 'rgba(150, 170, 255, 0.6)',
+            color: '#6a5acd',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

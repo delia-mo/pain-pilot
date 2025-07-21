@@ -65,8 +65,8 @@ const AppLayout = () => {
               height: '40px'
             }}
           />
-          <Typography variant="h5">
-            My Mobile Health App
+          <Typography variant="h4" sx={{ color: 'primary.dark' }}>
+            PainPilot
           </Typography>
         </Stack>
         <Paper

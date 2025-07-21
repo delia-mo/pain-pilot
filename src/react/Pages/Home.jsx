@@ -108,7 +108,7 @@ const Home = () => {
     const fetchWeather = async () => {
       try {
         const response = await fetch(
-          'https://api.openweathermap.org/data/2.5/weather?lat=52.52&lon=13.405&appid=DEIN_API_KEY&units=metric&lang=de'
+          'https://api.openweathermap.org/data/2.5/weather?lat=52.52&lon=13.405&appid=cbd90dceaef7999eddcc126de6448bf8&units=metric&lang=de'
         )
         const data = await response.json()
         setWeatherData(data)
@@ -139,7 +139,7 @@ const Home = () => {
         overflowY: 'auto'
       }}
     >
-      <Typography variant="h4" sx={{ mt: 3, mb: 3 }}>
+      <Typography variant="h4" sx={{ mt: 2, mb: 2 }}>
         Hallo!
       </Typography>
 
@@ -177,30 +177,49 @@ const Home = () => {
       </Box>
 
       {weatherData && (
-        <Box sx={{ mt: 4 }}>
+        <Box
+          sx={{
+            mt: 3,
+            p: 2,
+            borderRadius: 2,
+            backgroundColor: 'primary.dark',
+            color: 'primary.contrastText'
+          }}
+        >
+          <Typography variant="h5" sx={{ mb: 1 }}>
+            🌦 Migräne-Wetter heute
+          </Typography>
+
+          <Typography variant="body1" sx={{ mb: 1 }}>
+            {weatherWarning
+              ? 'Heute besteht ein erhöhtes Migräne-Risiko.'
+              : (() => {
+                if (weatherData?.main?.pressure < 1005) {
+                  return 'Mäßiges Migräne-Wetter: Achte auf dich.'
+                }
+                return 'Geringes Migräne-Risiko heute.'
+              })()}
+          </Typography>
+
           <Typography variant="body2">
-            Wetter:
+            Wetterlage:
+            {' '}
             {weatherData.weather?.[0]?.description ?? '–'}
           </Typography>
           <Typography variant="body2">
             Luftdruck:
+            {' '}
             {weatherData.main?.pressure ?? '–'}
+            {' '}
             hPa
           </Typography>
-
-          {weatherWarning && (
-            <Box
-              sx={{
-                mt: 2,
-                p: 2,
-                backgroundColor: 'warning.light',
-                color: 'warning.contrastText',
-                borderRadius: 2
-              }}
-            >
-              <Typography variant="body1">{weatherWarning}</Typography>
-            </Box>
-          )}
+          <Typography variant="body2">
+            Temperatur:
+            {' '}
+            {Math.round(weatherData.main?.temp ?? 0)}
+            {' '}
+            °C
+          </Typography>
         </Box>
       )}
 
@@ -225,7 +244,7 @@ const Home = () => {
               position: 'absolute',
               right: 8,
               top: 8,
-              color: (theme) => theme.palette.grey[500],
+              color: (theme) => theme.palette.grey[500]
             }}
           >
             <CloseIcon />
