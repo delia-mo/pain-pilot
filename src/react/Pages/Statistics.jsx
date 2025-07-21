@@ -8,11 +8,11 @@ import StatisticCard from '../Components/StatisticCard'
 import useMigraineData from '../../hooks/useMigraineData'
 import useMonthLabels from '../../hooks/useMonthLabels'
 import useSymptomLabels from '../../hooks/useSymptomLabels'
+import useTrackingAnalysis from '../../hooks/useTrackingAnalysis'
 import useTriggerLabels from '../../hooks/useTriggerLabels'
 
 const Statistics = () => {
-  const { entries, trackings, loggings } = useMigraineData()
-  console.log('Tracking data ', trackings)
+  const { loggings } = useMigraineData()
   const currentMonth = new Date().getMonth()
   const migraineDays = loggings.filter(e => new Date(e.date).getMonth() === currentMonth)
   const lastMigraineDate = [...loggings].sort((a, b) => new Date(b.date) - new Date(a.date))[0]?.date
@@ -35,7 +35,6 @@ const Statistics = () => {
       }
     })
   })
-  const symptomData = Object.entries(symptomCounts).map(([key, count]) => ({ name: symptomLabels[key] || key, count }))
   const topSymptoms = Object.entries(symptomCounts)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 3)
@@ -44,21 +43,13 @@ const Statistics = () => {
       count
     }))
 
-  const triggerCounts = {}
-  trackings.forEach(entry => {
-    Object.keys(triggerLabels).forEach(trigger => {
-      if (entry[trigger]) {
-        triggerCounts[trigger] = (triggerCounts[trigger] || 0) + 1
-      }
-    })
-  })
-  const triggerData = Object.entries(triggerCounts)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 3)
-    .map(([key, count]) => ({
-      name: triggerLabels[key] || key,
-      count
-    }))
+  const { topTriggers, triggerCounts } = useTrackingAnalysis()
+
+  const chartData = Object.entries(triggerCounts).map(([key, count]) => ({
+    name: triggerLabels[key] || key,
+    count
+  }))
+  chartData.sort((a, b) => b.count - a.count)
 
   return (
     <Box
@@ -73,6 +64,7 @@ const Statistics = () => {
       }}
     >
       <Typography variant="h4" gutterBottom>Migräne Statistik</Typography>
+
       {/* Überblick */}
       <Grid2 container spacing={2} mb={2}>
         <StatisticCard title={`Migräne-Tage ${currentMonthName}`} value={migraineDays.length} />
@@ -81,6 +73,7 @@ const Statistics = () => {
         <StatisticCard title="Ø Schmerzstärke" value={avgPain} />
       </Grid2>
 
+      {/* Top 3 Symptome */}
       <Paper
         elevation={0}
         sx={{
@@ -89,19 +82,23 @@ const Statistics = () => {
         }}
       >
         <Typography variant="h6">Top 3 Symptome</Typography>
-        <List>
-          {topSymptoms.map(s => (
-            <ListItem key={s.name}>
-              {s.name}
-              (
-              {s.count}
-              )
-            </ListItem>
-          ))}
-        </List>
+        {topSymptoms.length > 0 ? (
+          <List>
+            {topSymptoms.map(s => (
+              <ListItem key={s.name}>
+                {s.name}
+                (
+                {s.count}
+                )
+              </ListItem>
+            ))}
+          </List>
+        ) : (
+          <Typography variant="body2">Keine Symptome getrackt.</Typography>
+        )}
       </Paper>
 
-      {/* Symptome-Diagramm */}
+      {/* Trigger-Diagramm */}
       <Paper
         elevation={0}
         sx={{
@@ -109,20 +106,16 @@ const Statistics = () => {
           mb: 2
         }}
       >
-        <Typography variant="h6">Häufigste Symptome</Typography>
-        {triggerData.length > 0 ? (
+        <Typography variant="h6">Häufigste Trigger</Typography>
+        {topTriggers.length > 0 ? (
           <ResponsiveContainer width="100%" height={300}>
             <BarChart
               layout="vertical"
-              data={triggerData}
-              margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
+              data={chartData}
+              margin={{ top: 10, right: 20, left: 20, bottom: 10 }}
             >
               <XAxis type="number" allowDecimals={false} />
-              <YAxis
-                type="category"
-                dataKey="name"
-                width={110}
-              />
+              <YAxis type="category" dataKey="name" width={120} />
               <Tooltip />
               <Bar dataKey="count" fill={theme.palette.secondary.main} />
             </BarChart>
