@@ -3,11 +3,12 @@ import PropTypes from 'prop-types'
 import { Grid2, Paper, Typography } from '@mui/material'
 
 const StatisticCard = ({ title, value }) => (
-  <Grid2 xs={12} sm={4} md={3}>
+  <Grid2>
     <Paper
       elevation={0}
       sx={{
         padding: 2,
+        mb: 1,
         textAlign: 'center',
         height: '100%',
         display: 'flex',
@@ -16,7 +17,7 @@ const StatisticCard = ({ title, value }) => (
         wordBreak: 'break-word'
       }}
     >
-      <Typography variant="h4">{value}</Typography>
+      <Typography variant="h4" sx={{ lineHeight: 1 }}>{value}</Typography>
       <Typography variant="body">{title}</Typography>
     </Paper>
   </Grid2>

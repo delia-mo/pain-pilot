@@ -66,19 +66,46 @@ const Statistics = () => {
       <Typography variant="h4" gutterBottom>Migräne Statistik</Typography>
 
       {/* Überblick */}
-      <Grid2 container spacing={2} mb={2}>
+      <Grid2 container spacing={1} mb={1}>
         <StatisticCard title={`Migräne-Tage ${currentMonthName}`} value={migraineDays.length} />
         <StatisticCard title="Tage seit letzter Attacke" value={daysSinceMigraine} />
         <StatisticCard title="Ø Migräne-Tage / Monat" value={migraineDays.length} />
         <StatisticCard title="Ø Schmerzstärke" value={avgPain} />
       </Grid2>
 
+      {/* Trigger-Diagramm */}
+      <Paper
+        elevation={0}
+        sx={{
+          padding: 2,
+          mb: 1
+        }}
+      >
+        <Typography variant="h6">Häufigste Trigger</Typography>
+        {topTriggers.length > 0 ? (
+          <ResponsiveContainer width="100%" height={150} margin={{ top: 0, bottom: 5, left: 30, right: 10 }}>
+            <BarChart
+              layout="vertical"
+              data={chartData}
+              margin={{ top: 10, right: 20, left: 20, bottom: 10 }}
+            >
+              <XAxis type="number" allowDecimals={false} />
+              <YAxis type="category" dataKey="name" width={120} />
+              <Tooltip />
+              <Bar dataKey="count" fill={theme.palette.secondary.main} />
+            </BarChart>
+          </ResponsiveContainer>
+        ) : (
+          <Typography variant="body2">Keine Trigger getrackt.</Typography>
+        )}
+      </Paper>
+
       {/* Top 3 Symptome */}
       <Paper
         elevation={0}
         sx={{
           padding: 2,
-          mb: 3
+          mb: 1
         }}
       >
         <Typography variant="h6">Top 3 Symptome</Typography>
@@ -95,33 +122,6 @@ const Statistics = () => {
           </List>
         ) : (
           <Typography variant="body2">Keine Symptome getrackt.</Typography>
-        )}
-      </Paper>
-
-      {/* Trigger-Diagramm */}
-      <Paper
-        elevation={0}
-        sx={{
-          padding: 2,
-          mb: 2
-        }}
-      >
-        <Typography variant="h6">Häufigste Trigger</Typography>
-        {topTriggers.length > 0 ? (
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart
-              layout="vertical"
-              data={chartData}
-              margin={{ top: 10, right: 20, left: 20, bottom: 10 }}
-            >
-              <XAxis type="number" allowDecimals={false} />
-              <YAxis type="category" dataKey="name" width={120} />
-              <Tooltip />
-              <Bar dataKey="count" fill={theme.palette.secondary.main} />
-            </BarChart>
-          </ResponsiveContainer>
-        ) : (
-          <Typography variant="body2">Keine Trigger getrackt.</Typography>
         )}
       </Paper>
     </Box>
