@@ -79,6 +79,7 @@ const DailyLogModal = ({ date, open, onClose, startStep = 0 }) => {
           <TrackingForm
             defaultData={trackingData}
             onSave={handleSaveTracking}
+            onSkip={onClose}
           />
         )}
       </Paper>
