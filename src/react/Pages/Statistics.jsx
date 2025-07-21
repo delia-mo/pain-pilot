@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid2, Paper, Typography, Box } from '@mui/material'
+import { Grid2, Paper, Typography, Box, List, ListItem } from '@mui/material'
 import { BarChart, Bar, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { useTheme } from '@mui/material/styles'
 
@@ -8,9 +8,11 @@ import StatisticCard from '../Components/StatisticCard'
 import useMigraineData from '../../hooks/useMigraineData'
 import useMonthLabels from '../../hooks/useMonthLabels'
 import useSymptomLabels from '../../hooks/useSymptomLabels'
+import useTriggerLabels from '../../hooks/useTriggerLabels'
 
 const Statistics = () => {
   const { entries, trackings, loggings } = useMigraineData()
+  console.log('Tracking data ', trackings)
   const currentMonth = new Date().getMonth()
   const migraineDays = loggings.filter(e => new Date(e.date).getMonth() === currentMonth)
   const lastMigraineDate = [...loggings].sort((a, b) => new Date(b.date) - new Date(a.date))[0]?.date
@@ -22,6 +24,7 @@ const Statistics = () => {
   const symptomLabels = useSymptomLabels()
   const months = useMonthLabels()
   const theme = useTheme()
+  const triggerLabels = useTriggerLabels()
   const currentMonthName = months[currentMonth]
 
   const symptomCounts = {}
@@ -33,6 +36,29 @@ const Statistics = () => {
     })
   })
   const symptomData = Object.entries(symptomCounts).map(([key, count]) => ({ name: symptomLabels[key] || key, count }))
+  const topSymptoms = Object.entries(symptomCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+    .map(([key, count]) => ({
+      name: symptomLabels[key] || key,
+      count
+    }))
+
+  const triggerCounts = {}
+  trackings.forEach(entry => {
+    Object.keys(triggerLabels).forEach(trigger => {
+      if (entry[trigger]) {
+        triggerCounts[trigger] = (triggerCounts[trigger] || 0) + 1
+      }
+    })
+  })
+  const triggerData = Object.entries(triggerCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+    .map(([key, count]) => ({
+      name: triggerLabels[key] || key,
+      count
+    }))
 
   return (
     <Box
@@ -55,6 +81,26 @@ const Statistics = () => {
         <StatisticCard title="Ø Schmerzstärke" value={avgPain} />
       </Grid2>
 
+      <Paper
+        elevation={0}
+        sx={{
+          padding: 2,
+          mb: 3
+        }}
+      >
+        <Typography variant="h6">Top 3 Symptome</Typography>
+        <List>
+          {topSymptoms.map(s => (
+            <ListItem key={s.name}>
+              {s.name}
+              (
+              {s.count}
+              )
+            </ListItem>
+          ))}
+        </List>
+      </Paper>
+
       {/* Symptome-Diagramm */}
       <Paper
         elevation={0}
@@ -64,11 +110,11 @@ const Statistics = () => {
         }}
       >
         <Typography variant="h6">Häufigste Symptome</Typography>
-        {symptomData.length > 0 ? (
+        {triggerData.length > 0 ? (
           <ResponsiveContainer width="100%" height={300}>
             <BarChart
               layout="vertical"
-              data={symptomData}
+              data={triggerData}
               margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
             >
               <XAxis type="number" allowDecimals={false} />
@@ -82,7 +128,7 @@ const Statistics = () => {
             </BarChart>
           </ResponsiveContainer>
         ) : (
-          <Typography variant="body2">Keine Symptome getrackt.</Typography>
+          <Typography variant="body2">Keine Trigger getrackt.</Typography>
         )}
       </Paper>
     </Box>
