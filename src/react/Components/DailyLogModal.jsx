@@ -63,7 +63,7 @@ const DailyLogModal = ({ date, open, onClose, startStep = 0 }) => {
             <Button variant="contained" sx={{ m: 1 }} onClick={() => handleMigraineAnswer(true)}>
               Ja
             </Button>
-            <Button variant="outlined" sx={{ m: 1 }} onClick={() => handleMigraineAnswer(false)}>
+            <Button variant="contained" sx={{ m: 1 }} onClick={() => handleMigraineAnswer(false)}>
               Nein
             </Button>
           </>
