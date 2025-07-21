@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router'
 
 import { DateContext } from '../Context/DateContext'
 import DayCard from '../Components/Home/DayCard'
+import DailyLogModal from '../Components/DailyLogModal'
 
 function getDaysBeforeDate(dateStr, n) {
   const date = new Date(dateStr)
@@ -25,17 +26,15 @@ function getDaysBeforeDate(dateStr, n) {
 }
 
 function getStatusForDate(date) {
-  for (let i = 0; i < localStorage.length; i++) {
-    const value = localStorage.getItem(localStorage.key(i))
-    if (value?.startsWith('logging;')) {
-      const parts = value.split(';')
-      const datePart = parts.find(p => p.startsWith('date:'))
-      const statusPart = parts.find(p => p.startsWith('status:'))
-      const entryDate = datePart?.split(':')[1]
-      if (entryDate === date) {
-        const status = parseInt(statusPart?.split(':')[1], 10)
-        if (!Number.isNaN(status)) return status
+  const migraineRaw = localStorage.getItem(`migraine-${date}`)
+  if (migraineRaw) {
+    try {
+      const migraine = JSON.parse(migraineRaw)
+      if (typeof migraine.status === 'number') {
+        return migraine.status
       }
+    } catch (e) {
+      console.error('Fehler beim Parsen von migraine-Eintrag:', e)
     }
   }
   return 6
@@ -47,27 +46,28 @@ const Home = () => {
   const navigate = useNavigate()
   const [logData, setLogData] = useState([])
   const [showSplash, setShowSplash] = useState(false)
+  const [showLogModal, setShowLogModal] = useState(false)
+  const [logModalStep, setLogModalStep] = useState(0)
 
   // Aktualisieren der Anzeige wg Datum
-  useEffect(() => {
-    const daysToShow = 7
+  const loadLogData = () => {
+    const daysToShow = 6 // 6 Tage vor heute
     const data = []
 
-    const todayStatus = getStatusForDate(todayStr)
-    const includeToday = todayStatus !== 6 
-
-    for (let i = daysToShow - 1; i >= 0; i--) {
-      const offset = includeToday ? i : i + 1
-      const day = getDaysBeforeDate(todayStr, offset)
+    for (let i = daysToShow; i > 0; i--) {
+      const day = getDaysBeforeDate(todayStr, i)
       const status = getStatusForDate(day)
       data.push({ date: day, status })
     }
 
-    if (includeToday) {
-      data.push({ date: todayStr, status: todayStatus })
-    }
+    const todayStatus = getStatusForDate(todayStr)
+    data.push({ date: todayStr, status: todayStatus })
 
     setLogData(data)
+  }
+
+  useEffect(() => {
+    loadLogData()
   }, [todayStr])
 
   // Scrollen von rechts
@@ -134,15 +134,11 @@ const Home = () => {
         sx={{
           display: 'flex',
           overflowX: 'auto',
+          gap: 0.2,
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
           '&::-webkit-scrollbar': {
-            height: 6
-          },
-          '&::-webkit-scrollbar-track': {
-            background: '#222'
-          },
-          '&::-webkit-scrollbar-thumb': {
-            backgroundColor: '#888',
-            borderRadius: 4
+            display: 'none'
           }
         }}
       >
@@ -155,22 +151,6 @@ const Home = () => {
           />
         ))}
       </Box>
-
-      <Button
-        variant="contained"
-        size="medium"
-        color="secondary"
-        onClick={() => navigate('/add-migraine')}
-        sx={{
-          mt: 3,
-          mb: 2,
-          textTransform: 'none',
-          width: 'fit-content',
-          alignSelf: 'center'
-        }}
-      >
-        Wie fühlst du dich heute?
-      </Button>
 
       {weatherData && (
         <Box sx={{ mt: 4 }}>
@@ -213,6 +193,7 @@ const Home = () => {
             position: 'relative'
           }}
         >
+          <Typography variant="h6">Willkommen!</Typography>
           <IconButton
             aria-label="close"
             onClick={() => setShowSplash(false)}
@@ -226,36 +207,51 @@ const Home = () => {
             <CloseIcon />
           </IconButton>
         </DialogTitle>
-        <DialogContent>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              textAlign: 'center',
-              mt: 2
-            }}
-          >
-            <Typography variant="h5">Willkommen zurück!</Typography>
-            <Typography>Wie geht es dir heute?</Typography>
 
+        <DialogContent>
+          <Typography variant="body1" sx={{ mb: 2 }}>
+            Hattest du heute schon Migräne?
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
             <Button
               variant="contained"
+              size="small"
+              sx={{ flex: 0.5 }}
               onClick={() => {
                 setShowSplash(false)
-                navigate('/add-migraine')
-              }}
-              sx={{
-                mt: 2,
-                textTransform: 'none'
+                setLogModalStep(1)
+                setShowLogModal(true)
               }}
             >
-              Jetzt eintragen
+              Ja
+            </Button>
+            <Button
+              variant="contained"
+              size="small"
+              sx={{ flex: 0.5 }}
+              onClick={() => {
+                setShowSplash(false)
+                setLogModalStep(2)
+                setShowLogModal(true)
+              }}
+            >
+              Nein
             </Button>
           </Box>
         </DialogContent>
-
       </Dialog>
+
+      {showLogModal && (
+        <DailyLogModal
+          date={todayStr}
+          open
+          startStep={logModalStep}
+          onClose={() => {
+            setShowLogModal(false)
+            loadLogData()
+          }}
+        />
+      )}
 
     </Stack>
   )

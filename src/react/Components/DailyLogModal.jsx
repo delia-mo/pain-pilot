@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Box, Typography, Button, Paper } from '@mui/material'
+import { useNavigate } from 'react-router'
+
 import MigraineForm from './MigraineForm'
 import TrackingForm from './TrackingForm'
 import calculateStatus from '../utils/calculateStatus'
 
-const DailyLogModal = ({ date, open, onClose }) => {
-  const [step, setStep] = useState(0)
+const DailyLogModal = ({ date, open, onClose, startStep = 0 }) => {
+  const [step, setStep] = useState(startStep)
   const [migraineData, setMigraineData] = useState(null)
   const [trackingData, setTrackingData] = useState(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!open) return
@@ -16,8 +19,8 @@ const DailyLogModal = ({ date, open, onClose }) => {
     const tracking = JSON.parse(localStorage.getItem(`tracking-${date}`) || '{}')
     setMigraineData(migraine)
     setTrackingData(tracking)
-    setStep(0)
-  }, [date, open])
+    setStep(startStep)
+  }, [date, open, startStep])
 
   const handleMigraineAnswer = (answer) => setStep(answer ? 1 : 2)
 
@@ -34,6 +37,7 @@ const DailyLogModal = ({ date, open, onClose }) => {
     localStorage.setItem(`tracking-${date}`, JSON.stringify(fullData))
     setTrackingData(fullData)
     onClose()
+    navigate('/')
   }
 
   if (!open) return null
@@ -85,7 +89,12 @@ const DailyLogModal = ({ date, open, onClose }) => {
 DailyLogModal.propTypes = {
   date: PropTypes.string.isRequired,
   open: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired,
+  startStep: PropTypes.number
+}
+
+DailyLogModal.defaultProps = {
+  startStep: 0
 }
 
 export default DailyLogModal

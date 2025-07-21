@@ -40,7 +40,7 @@ const DayCard = ({ date, status, onClick }) => {
       sx={{
         cursor: 'pointer',
         minWidth: 100,
-        minHeight: 350,
+        minHeight: 340,
         backgroundImage: `url(${images[safeStatus]})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
