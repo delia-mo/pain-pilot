@@ -4,8 +4,14 @@ import {
   Stack,
   Box,
   Typography,
-  Button
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  IconButton
 } from '@mui/material'
+
+import CloseIcon from '@mui/icons-material/Close'
 
 import { useNavigate } from 'react-router'
 
@@ -40,6 +46,7 @@ const Home = () => {
   const scrollRef = useRef(null)
   const navigate = useNavigate()
   const [logData, setLogData] = useState([])
+  const [showSplash, setShowSplash] = useState(false)
 
   // Aktualisieren der Anzeige wg Datum
   useEffect(() => {
@@ -47,7 +54,7 @@ const Home = () => {
     const data = []
 
     const todayStatus = getStatusForDate(todayStr)
-    const includeToday = todayStatus !== 6 // 6 = kein Eintrag gefunden
+    const includeToday = todayStatus !== 6 
 
     for (let i = daysToShow - 1; i >= 0; i--) {
       const offset = includeToday ? i : i + 1
@@ -57,7 +64,6 @@ const Home = () => {
     }
 
     if (includeToday) {
-      // Heute ganz zum Schluss einfügen
       data.push({ date: todayStr, status: todayStatus })
     }
 
@@ -70,6 +76,42 @@ const Home = () => {
       scrollRef.current.scrollLeft = scrollRef.current.scrollWidth
     }
   }, [logData])
+
+  useEffect(() => {
+    const today = new Date().toISOString().slice(0, 10)
+    const alreadyShown = localStorage.getItem(`splash-shown-${today}`)
+    if (!alreadyShown) {
+      setShowSplash(true)
+      localStorage.setItem(`splash-shown-${today}`, 'true')
+    }
+  }, [])
+
+  // wetter
+  const [weatherData, setWeatherData] = useState(null)
+  const [weatherWarning, setWeatherWarning] = useState(null)
+
+  useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        const response = await fetch(
+          'https://api.openweathermap.org/data/2.5/weather?lat=52.52&lon=13.405&appid=DEIN_API_KEY&units=metric&lang=de'
+        )
+        const data = await response.json()
+        setWeatherData(data)
+
+        const weatherMain = data.weather?.[0]?.main
+        if (weatherMain === 'Thunderstorm') {
+          setWeatherWarning('Achtung: Gewitter – Migränegefahr möglich')
+        } else {
+          setWeatherWarning(null)
+        }
+      } catch (err) {
+        console.error('Fehler beim Laden des Wetters:', err)
+      }
+    }
+
+    fetchWeather()
+  }, [])
 
   return (
     <Stack
@@ -92,8 +134,16 @@ const Home = () => {
         sx={{
           display: 'flex',
           overflowX: 'auto',
-          gap: 1,
-          paddingBottom: 1
+          '&::-webkit-scrollbar': {
+            height: 6
+          },
+          '&::-webkit-scrollbar-track': {
+            background: '#222'
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: '#888',
+            borderRadius: 4
+          }
         }}
       >
         {logData.map(day => (
@@ -109,7 +159,7 @@ const Home = () => {
       <Button
         variant="contained"
         size="medium"
-        color="primary"
+        color="secondary"
         onClick={() => navigate('/add-migraine')}
         sx={{
           mt: 3,
@@ -121,6 +171,91 @@ const Home = () => {
       >
         Wie fühlst du dich heute?
       </Button>
+
+      {weatherData && (
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="body2">
+            Wetter:
+            {weatherData.weather?.[0]?.description ?? '–'}
+          </Typography>
+          <Typography variant="body2">
+            Luftdruck:
+            {weatherData.main?.pressure ?? '–'}
+            hPa
+          </Typography>
+
+          {weatherWarning && (
+            <Box
+              sx={{
+                mt: 2,
+                p: 2,
+                backgroundColor: 'warning.light',
+                color: 'warning.contrastText',
+                borderRadius: 2
+              }}
+            >
+              <Typography variant="body1">{weatherWarning}</Typography>
+            </Box>
+          )}
+        </Box>
+      )}
+
+      <Dialog
+        open={showSplash}
+        onClose={() => setShowSplash(false)}
+        aria-labelledby="splash-dialog-title"
+      >
+        <DialogTitle
+          sx={{
+            m: 0,
+            p: 2,
+            pr: 7,
+            position: 'relative'
+          }}
+        >
+          <IconButton
+            aria-label="close"
+            onClick={() => setShowSplash(false)}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+              mt: 2
+            }}
+          >
+            <Typography variant="h5">Willkommen zurück!</Typography>
+            <Typography>Wie geht es dir heute?</Typography>
+
+            <Button
+              variant="contained"
+              onClick={() => {
+                setShowSplash(false)
+                navigate('/add-migraine')
+              }}
+              sx={{
+                mt: 2,
+                textTransform: 'none'
+              }}
+            >
+              Jetzt eintragen
+            </Button>
+          </Box>
+        </DialogContent>
+
+      </Dialog>
 
     </Stack>
   )
