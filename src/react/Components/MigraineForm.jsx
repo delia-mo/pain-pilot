@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import {
   Box, Typography, Slider, FormGroup,
   FormControlLabel, Checkbox, Button
 } from '@mui/material'
 
-const MigraineForm = ({ defaultData = {}, onSave, onSkip }) => {
+function deepEqual(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b)
+}
+
+const MigraineForm = ({ defaultData = {}, onSave, onSkip, hideSaveButton = false }) => {
   const [form, setForm] = useState({
     schmerzen: 0,
     aura: false,
@@ -24,13 +28,28 @@ const MigraineForm = ({ defaultData = {}, onSave, onSkip }) => {
     }))
   }
 
+  useEffect(() => {
+    setForm(prev => ({ ...prev, ...defaultData }))
+  }, [defaultData])
+
+  const previousFormRef = useRef(form)
+
+  useEffect(() => {
+    if (hideSaveButton && !deepEqual(previousFormRef.current, form)) {
+      previousFormRef.current = form
+      onSave(form)
+    }
+  }, [form, hideSaveButton])
+
   return (
     <Box sx={{ padding: 2 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Button variant="outlined" onClick={onSkip}>
-          Skip
-        </Button>
-      </Box>
+      {!hideSaveButton && (
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Button variant="outlined" onClick={onSkip}>
+            Skip
+          </Button>
+        </Box>
+      )}
 
       <Typography variant="h6" gutterBottom>
         Migräne Logging
@@ -42,7 +61,6 @@ const MigraineForm = ({ defaultData = {}, onSave, onSkip }) => {
           <br />
           {form.schmerzen}
         </Typography>
-
         <Slider
           name="schmerzen"
           value={form.schmerzen}
@@ -68,9 +86,11 @@ const MigraineForm = ({ defaultData = {}, onSave, onSkip }) => {
         ))}
       </FormGroup>
 
-      <Button variant="contained" sx={{ mt: 2 }} onClick={() => onSave(form)}>
-        Speichern
-      </Button>
+      {!hideSaveButton && (
+        <Button variant="contained" sx={{ mt: 2 }} onClick={() => onSave(form)}>
+          Speichern
+        </Button>
+      )}
     </Box>
   )
 }
@@ -78,7 +98,8 @@ const MigraineForm = ({ defaultData = {}, onSave, onSkip }) => {
 MigraineForm.propTypes = {
   defaultData: PropTypes.object,
   onSave: PropTypes.func.isRequired,
-  onSkip: PropTypes.func
+  onSkip: PropTypes.func,
+  hideSaveButton: PropTypes.bool
 }
 
 export default MigraineForm

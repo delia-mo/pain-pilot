@@ -1,103 +1,83 @@
-import React, { useState, useEffect } from 'react'
-import { Stack, Typography, Paper, Alert } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { Stack, Typography, Button, Divider } from '@mui/material'
 import MigraineForm from '../Components/MigraineForm'
 import TrackingForm from '../Components/TrackingForm'
 import calculateStatus from '../utils/calculateStatus'
 
-const formatDate = (dateStr) => {
-  const date = new Date(dateStr)
-  const day = date.getDate().toString().padStart(2, '0')
-  const month = (date.getMonth() + 1).toString().padStart(2, '0')
-  const year = date.getFullYear()
-  return ` ${day}.${month}.${year} `
-}
-
 const UpdateDay = () => {
   const { date } = useParams()
+  const formateDate = new Date(date).toLocaleDateString('de-DE', {
+    day: '2-digit',
+    month: '2-digit'
+  })
+
   const navigate = useNavigate()
-  const [migraineData, setMigraineData] = useState(null)
-  const [trackingData, setTrackingData] = useState(null)
-  const [saved, setSaved] = useState(false)
+
+  const [migraineData, setMigraineData] = useState({})
+  const [trackingData, setTrackingData] = useState({})
 
   useEffect(() => {
-    const migraine = JSON.parse(localStorage.getItem(`migraine-${date}`) || 'null')
-    const tracking = JSON.parse(localStorage.getItem(`tracking-${date}`) || 'null')
-    setMigraineData(migraine)
-    setTrackingData(tracking)
+    const storedMigraine = JSON.parse(localStorage.getItem(`migraine-${date}`) || '{}')
+    const storedTracking = JSON.parse(localStorage.getItem(`tracking-${date}`) || '{}')
+
+    setMigraineData(storedMigraine)
+    setTrackingData(storedTracking)
   }, [date])
 
-  useEffect(() => {
-    if (saved) {
-      const timeout = setTimeout(() => navigate('/'), 1500)
-      return () => clearTimeout(timeout)
-    }
-  }, [saved, navigate])
+  const handleSave = () => {
+    const status = calculateStatus(migraineData.schmerzen ?? 0)
+    const fullMigraine = { ...migraineData, date, status }
+    const fullTracking = { ...trackingData, date }
 
-  const handleSaveMigraine = (data) => {
-    const status = calculateStatus(data.schmerzen)
-    const fullData = { ...data, date, status }
-    localStorage.setItem(`migraine-${date}`, JSON.stringify(fullData))
-    setMigraineData(fullData)
-    setSaved(true)
-  }
+    localStorage.setItem(`migraine-${date}`, JSON.stringify(fullMigraine))
+    localStorage.setItem(`tracking-${date}`, JSON.stringify(fullTracking))
 
-  const handleSaveTracking = (data) => {
-    const fullData = { ...data, date }
-    localStorage.setItem(`tracking-${date}`, JSON.stringify(fullData))
-    setTrackingData(fullData)
-    setSaved(true)
+    navigate('/')
   }
 
   return (
     <Stack
-      spacing={2}
+      spacing={3}
       sx={{
         width: '100%',
-        height: '100%',
-        padding: 2,
-        backgroundColor: theme => theme.palette.background.default,
-        color: theme => theme.palette.text.primary,
-        fontFamily: theme => theme.typography.fontFamily,
+        maxWidth: 600,
+        mx: 'auto',
+        py: 4,
+        px: 2,
+        height: '100vh',
         overflowY: 'auto'
       }}
     >
-      <Typography variant="h5">
+      <Typography variant="h5" align="center">
         Eintrag vom
-        {formatDate(date)}
+        {` ${formateDate} `}
         bearbeiten
       </Typography>
 
-      {saved && <Alert severity="success">Änderung gespeichert! Weiterleitung…</Alert>}
+      <MigraineForm
+        defaultData={migraineData}
+        onSave={(data) => setMigraineData(data)}
+        onSkip={() => {}}
+        hideSaveButton
+      />
 
-      <Paper sx={{ padding: 2 }}>
-        {migraineData !== null && (
-          <>
-            <Typography variant="h6">Migräne</Typography>
-            <MigraineForm
-              defaultData={migraineData}
-              onSave={handleSaveMigraine}
-              onSkip={() => setMigraineData(null)}
-            />
-          </>
-        )}
+      <Divider />
 
-        {trackingData !== null && (
-          <>
-            <Typography variant="h6" sx={{ mt: 3 }}>Tracking</Typography>
-            <TrackingForm
-              defaultData={trackingData}
-              onSave={handleSaveTracking}
-            />
-          </>
-        )}
+      <TrackingForm
+        defaultData={trackingData}
+        onSave={(data) => setTrackingData(data)}
+        hideSaveButton
+      />
 
-        {migraineData === null && trackingData === null && (
-          <Typography color="text.secondary">
-            Für diesen Tag wurden keine Daten gefunden.
-          </Typography>
-        )}
-      </Paper>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleSave}
+        sx={{ mt: 2 }}
+      >
+        Alles speichern
+      </Button>
     </Stack>
   )
 }

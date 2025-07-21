@@ -47,7 +47,7 @@ const theme = createTheme({
 
   components: {
     MuiCssBaseline: {
-      styleOverrides: defaultTheme => ({
+      styleOverrides: {
         html: {
           width: '100%',
           height: '100%'
@@ -55,13 +55,13 @@ const theme = createTheme({
         body: {
           width: '100%',
           height: '100%',
-          background: defaultTheme.palette.grey[200]
+          background: '#c3baff'
         },
         '#app': {
           width: '100%',
           height: '100%'
         }
-      })
+      }
     }
   }
 })

@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import {
   Box, Typography, Slider, FormGroup,
   FormControlLabel, Checkbox, Button
 } from '@mui/material'
 
-const TrackingForm = ({ defaultData = {}, onSave }) => {
+function deepEqual(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b)
+}
+
+const TrackingForm = ({ defaultData = {}, onSave, hideSaveButton = false }) => {
   const [form, setForm] = useState({
     stress: 0,
     schlaf: 0,
@@ -34,6 +38,19 @@ const TrackingForm = ({ defaultData = {}, onSave }) => {
     { name: 'hydration', label: 'Hydration (0–2)', min: 0, max: 2 },
     { name: 'meals', label: 'Meals (0–2)', min: 0, max: 2 }
   ]
+
+  useEffect(() => {
+    setForm(prev => ({ ...prev, ...defaultData }))
+  }, [defaultData])
+
+  const previousFormRef = useRef(form)
+
+  useEffect(() => {
+    if (hideSaveButton && !deepEqual(previousFormRef.current, form)) {
+      previousFormRef.current = form
+      onSave(form)
+    }
+  }, [form, hideSaveButton])
 
   return (
     <Box sx={{ padding: 2 }}>
@@ -75,16 +92,19 @@ const TrackingForm = ({ defaultData = {}, onSave }) => {
         ))}
       </FormGroup>
 
-      <Button variant="contained" sx={{ mt: 2 }} onClick={() => onSave(form)}>
-        Speichern
-      </Button>
+      {!hideSaveButton && (
+        <Button variant="contained" sx={{ mt: 2 }} onClick={() => onSave(form)}>
+          Speichern
+        </Button>
+      )}
     </Box>
   )
 }
 
 TrackingForm.propTypes = {
   defaultData: PropTypes.object,
-  onSave: PropTypes.func.isRequired
+  onSave: PropTypes.func.isRequired,
+  hideSaveButton: PropTypes.bool
 }
 
 export default TrackingForm

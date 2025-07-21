@@ -48,6 +48,9 @@ const Home = () => {
   const [showSplash, setShowSplash] = useState(false)
   const [showLogModal, setShowLogModal] = useState(false)
   const [logModalStep, setLogModalStep] = useState(0)
+  const [logModalDate, setLogModalDate] = useState(null)
+  const [showMigraineActiveDialog, setShowMigraineActiveDialog] = useState(false)
+  const [activeMigraineDate, setActiveMigraineDate] = useState(null)
 
   // Aktualisieren der Anzeige wg Datum
   const loadLogData = () => {
@@ -83,6 +86,17 @@ const Home = () => {
     if (!alreadyShown) {
       setShowSplash(true)
       localStorage.setItem(`splash-shown-${today}`, 'true')
+    }
+  }, [])
+
+  useEffect(() => {
+    const keys = Object.keys(localStorage)
+    const activeKey = keys.find(k => k.startsWith('migraine-') && localStorage.getItem(k)?.includes('"active":true'))
+
+    if (activeKey) {
+      const date = activeKey.split('migraine-')[1]
+      setActiveMigraineDate(date)
+      setShowMigraineActiveDialog(true)
     }
   }, [])
 
@@ -147,9 +161,19 @@ const Home = () => {
             key={day.date}
             date={day.date}
             status={day.status}
-            onClick={() => navigate(`/updateDay/${day.date}`)}
+            onClick={() => {
+              const existing = localStorage.getItem(`migraine-${day.date}`)
+              if (existing) {
+                navigate(`/updateDay/${day.date}`)
+              } else {
+                setLogModalDate(day.date)
+                setLogModalStep(1)
+                setShowLogModal(true)
+              }
+            }}
           />
         ))}
+
       </Box>
 
       {weatherData && (
@@ -220,6 +244,7 @@ const Home = () => {
               onClick={() => {
                 setShowSplash(false)
                 setLogModalStep(1)
+                setLogModalDate(todayStr)
                 setShowLogModal(true)
               }}
             >
@@ -232,6 +257,7 @@ const Home = () => {
               onClick={() => {
                 setShowSplash(false)
                 setLogModalStep(2)
+                setLogModalDate(todayStr)
                 setShowLogModal(true)
               }}
             >
@@ -241,13 +267,60 @@ const Home = () => {
         </DialogContent>
       </Dialog>
 
-      {showLogModal && (
+      <Dialog
+        open={showMigraineActiveDialog}
+        onClose={() => setShowMigraineActiveDialog(false)}
+        aria-labelledby="active-attack-dialog"
+      >
+        <DialogTitle sx={{ m: 0, p: 2, pr: 7, position: 'relative' }}>
+          <Typography variant="h6">Migräne-Attacke</Typography>
+          <IconButton
+            aria-label="close"
+            onClick={() => setShowMigraineActiveDialog(false)}
+            sx={{ position: 'absolute', right: 8, top: 8, color: (theme) => theme.palette.grey[500] }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+
+        <DialogContent>
+          <Typography variant="body1" sx={{ mb: 2 }}>
+            Ist deine Migräne-Attacke vorbei?
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
+            <Button
+              variant="contained"
+              size="small"
+              sx={{ flex: 0.5 }}
+              onClick={() => {
+                setShowMigraineActiveDialog(false)
+                navigate(`/updateDay/${activeMigraineDate}`)
+              }}
+            >
+              Ja
+            </Button>
+            <Button
+              variant="contained"
+              size="small"
+              sx={{ flex: 0.5 }}
+              onClick={() => {
+                setShowMigraineActiveDialog(false)
+              }}
+            >
+              Nein
+            </Button>
+          </Box>
+        </DialogContent>
+      </Dialog>
+
+      {showLogModal && logModalDate && (
         <DailyLogModal
-          date={todayStr}
+          date={logModalDate}
           open
           startStep={logModalStep}
           onClose={() => {
             setShowLogModal(false)
+            setLogModalDate(null)
             loadLogData()
           }}
         />

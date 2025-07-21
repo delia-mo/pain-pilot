@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
 import {
   Card,
-  Typography
+  Typography,
+  Box
 } from '@mui/material'
 
 import bild0 from '../../../assets/bild-0.svg'
@@ -33,6 +33,7 @@ const formatDate = (dateStr) => {
 
 const DayCard = ({ date, status, onClick }) => {
   const safeStatus = [0, 1, 2, 3, 4, 5].includes(status) ? status : 6
+  const isMissing = safeStatus === 6
 
   return (
     <Card
@@ -56,12 +57,36 @@ const DayCard = ({ date, status, onClick }) => {
       <Typography
         variant="body1"
         sx={{
-          mt: 30
+          mt: 30,
+          zIndex: 1
         }}
       >
         {formatDate(date)}
       </Typography>
 
+      {isMissing && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 8,
+            right: 8,
+            width: 24,
+            height: 24,
+            borderRadius: '50%',
+            backgroundColor: 'rgba(120, 130, 255, 0.4)',
+            color: 'rgba(150, 170, 255, 0.6)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontWeight: 'bold',
+            fontSize: '20px',
+            zIndex: 2,
+            opacity: 0.6
+          }}
+        >
+          +
+        </Box>
+      )}
     </Card>
   )
 }
