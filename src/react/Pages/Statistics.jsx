@@ -66,13 +66,13 @@ const Statistics = () => {
       <Typography variant="h4" gutterBottom>Migräne Statistik</Typography>
 
       {/* Überblick */}
-      <Grid2 container spacing={1} mb={1}>
+      <Grid2 container spacing={1}>
         <Grid2 size={{ xs: 6 }}>
           <StatisticCard title={`Migräne-Tage ${currentMonthName}`} value={migraineDays.length} />
-          <StatisticCard title="Tage seit letzter Attacke" value={daysSinceMigraine} />
+          <StatisticCard title="Ø Migräne-Tage / Monat" value={migraineDays.length} />
         </Grid2>
         <Grid2 size={{ xs: 6 }}>
-          <StatisticCard title="Ø Migräne-Tage / Monat" value={migraineDays.length} />
+          <StatisticCard title="Tage seit letzter Attacke" value={daysSinceMigraine} />
           <StatisticCard title="Ø Schmerzstärke" value={avgPain} />
         </Grid2>
       </Grid2>
@@ -87,14 +87,31 @@ const Statistics = () => {
       >
         <Typography variant="h6">Häufigste Trigger</Typography>
         {topTriggers.length > 0 ? (
-          <ResponsiveContainer width="100%" height={150} margin={{ top: 0, bottom: 5, left: 30, right: 10 }}>
+          <ResponsiveContainer width="100%" height={Math.max(chartData.length * 40, 200)} margin={{ top: 10, bottom: 0, left: 0, right: 10 }}>
             <BarChart
               layout="vertical"
               data={chartData}
-              margin={{ top: 10, right: 20, left: 20, bottom: 10 }}
+              margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
             >
-              <XAxis type="number" allowDecimals={false} />
-              <YAxis type="category" dataKey="name" width={120} />
+              <XAxis
+                type="number"
+                allowDecimals={false}
+                stroke={theme.palette.secondary.light}
+                tick={{
+                  fontSize: 14,
+                  fill: theme.palette.primary.contrastText
+                }}
+              />
+              <YAxis
+                type="category"
+                dataKey="name"
+                width={110}
+                stroke={theme.palette.secondary.light}
+                tick={{
+                  fontSize: 14,
+                  fill: theme.palette.primary.contrastText
+                }}
+              />
               <Tooltip />
               <Bar dataKey="count" fill={theme.palette.secondary.main} />
             </BarChart>
@@ -114,9 +131,9 @@ const Statistics = () => {
       >
         <Typography variant="h6">Top 3 Symptome</Typography>
         {topSymptoms.length > 0 ? (
-          <List>
+          <List dense disablePadding>
             {topSymptoms.map(s => (
-              <ListItem key={s.name}>
+              <ListItem key={s.name} sx={{ py: 0.3, px: 2 }}>
                 {s.name}
                 (
                 {s.count}
