@@ -67,10 +67,14 @@ const Statistics = () => {
 
       {/* Überblick */}
       <Grid2 container spacing={1} mb={1}>
-        <StatisticCard title={`Migräne-Tage ${currentMonthName}`} value={migraineDays.length} />
-        <StatisticCard title="Tage seit letzter Attacke" value={daysSinceMigraine} />
-        <StatisticCard title="Ø Migräne-Tage / Monat" value={migraineDays.length} />
-        <StatisticCard title="Ø Schmerzstärke" value={avgPain} />
+        <Grid2 size={{ xs: 6 }}>
+          <StatisticCard title={`Migräne-Tage ${currentMonthName}`} value={migraineDays.length} />
+          <StatisticCard title="Tage seit letzter Attacke" value={daysSinceMigraine} />
+        </Grid2>
+        <Grid2 size={{ xs: 6 }}>
+          <StatisticCard title="Ø Migräne-Tage / Monat" value={migraineDays.length} />
+          <StatisticCard title="Ø Schmerzstärke" value={avgPain} />
+        </Grid2>
       </Grid2>
 
       {/* Trigger-Diagramm */}
