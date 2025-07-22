@@ -1,9 +1,13 @@
 import React from 'react'
 import { Box, Button, Typography, Stack } from '@mui/material'
 
+import { calculateStatus } from '../Components/Status'
+
 const insertTestData = () => {
   const start = new Date('2025-06-01')
-  const end = new Date('2025-07-20')
+  const today = new Date()
+  const end = new Date(today)
+  end.setDate(end.getDate() - 1)
   const migraineDays = new Set()
 
   while (migraineDays.size < 10) {
@@ -31,8 +35,9 @@ const insertTestData = () => {
     }
     localStorage.setItem(`tracking-${dateStr}`, JSON.stringify(trackingData))
 
+    let migraineData
     if (migraineDays.has(dateStr)) {
-      const migraineData = {
+      migraineData = {
         schmerzen: Math.floor(Math.random() * 11),
         aura: Math.random() < 0.5,
         uebelkeit: Math.random() < 0.3,
@@ -42,8 +47,14 @@ const insertTestData = () => {
         date: dateStr,
         status: Math.floor(Math.random() * 4)
       }
-      localStorage.setItem(`migraine-${dateStr}`, JSON.stringify(migraineData))
+      // localStorage.setItem(`migraine-${dateStr}`, JSON.stringify(migraineData))
     }
+    const status = calculateStatus(trackingData, migraineData || undefined)
+    const loggingWithStatus = {
+      ...migraineData,
+      status
+    }
+    localStorage.setItem(`migraine-${dateStr}`, JSON.stringify(loggingWithStatus))
   }
 }
 
