@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router'
 
 import MigraineForm from './MigraineForm'
 import TrackingForm from './TrackingForm'
-import calculateStatus from '../utils/calculateStatus'
+import { calculateStatus } from './Status'
 
 const DailyLogModal = ({ date, open, onClose, startStep = 0 }) => {
   const [step, setStep] = useState(startStep)
@@ -25,10 +25,11 @@ const DailyLogModal = ({ date, open, onClose, startStep = 0 }) => {
   const handleMigraineAnswer = (answer) => setStep(answer ? 1 : 2)
 
   const handleSaveMigraine = (data) => {
-    const status = calculateStatus(data.schmerzen)
-    const fullData = { ...data, date, status }
-    localStorage.setItem(`migraine-${date}`, JSON.stringify(fullData))
-    setMigraineData(fullData)
+    const fullData = { ...data, date }
+    const status = calculateStatus(trackingData, fullData)
+    const fullWithStatus = { ...fullData, status }
+    localStorage.setItem(`migraine-${date}`, JSON.stringify(fullWithStatus))
+    setMigraineData(fullWithStatus)
     setStep(2)
   }
 
