@@ -81,7 +81,13 @@ const MigraineForm = ({ defaultData = {}, onSave, onSkip, hideSaveButton = false
                 onChange={handleChange}
               />
             }
-            label={field.charAt(0).toUpperCase() + field.slice(1)}
+            label={{
+              aura: 'Aura',
+              uebelkeit: 'Übelkeit',
+              taubheit: 'Taubheit',
+              sprechen: 'Schwierigkeiten beim Sprechen',
+              muskel: 'Muskelschmerzen oder -zucken'
+            }[field]}
           />
         ))}
       </FormGroup>

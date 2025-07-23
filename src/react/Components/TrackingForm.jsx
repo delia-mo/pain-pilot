@@ -9,7 +9,7 @@ function deepEqual(a, b) {
   return JSON.stringify(a) === JSON.stringify(b)
 }
 
-const TrackingForm = ({ defaultData = {}, onSave, hideSaveButton = false }) => {
+const TrackingForm = ({ defaultData = {}, onSave, onSkip, hideSaveButton = false }) => {
   const [form, setForm] = useState({
     stress: 0,
     schlaf: 0,
@@ -31,12 +31,12 @@ const TrackingForm = ({ defaultData = {}, onSave, hideSaveButton = false }) => {
   }
 
   const sliderFields = [
-    { name: 'stress', label: 'Stress (0–5)', min: 0, max: 5 },
-    { name: 'psychisch', label: 'Psychisch (0–5)', min: 0, max: 5 },
-    { name: 'reize', label: 'Reize (0–5)', min: 0, max: 5 },
-    { name: 'schlaf', label: 'Schlaf (0–12)', min: 0, max: 12 },
-    { name: 'hydration', label: 'Hydration (0–2)', min: 0, max: 2 },
-    { name: 'meals', label: 'Meals (0–2)', min: 0, max: 2 }
+    { name: 'stress', label: 'Wie viel Stress? (0 = kein Stress, 5 = sehr viel)', min: 0, max: 5 },
+    { name: 'psychisch', label: 'Wie fühlst du dich psychisch? (0 = sehr schlecht, 5 = sehr gut)', min: 0, max: 5 },
+    { name: 'reize', label: 'Wie viele Reize? (z. B. Lärm, Licht)', min: 0, max: 5 },
+    { name: 'schlaf', label: 'Wie viele Stunden hast du geschlafen?', min: 0, max: 12 },
+    { name: 'hydration', label: 'Wie viel hast du getrunken? (0 = wenig, 2 = viel)', min: 0, max: 2 },
+    { name: 'meals', label: 'Wie gut hast du gegessen? (0 = wenig, 2 = viel)', min: 0, max: 2 }
   ]
 
   useEffect(() => {
@@ -54,6 +54,11 @@ const TrackingForm = ({ defaultData = {}, onSave, hideSaveButton = false }) => {
 
   return (
     <Box sx={{ padding: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Button variant="contained" onClick={onSkip}>
+          Skip
+        </Button>
+      </Box>
       <Typography variant="h6" gutterBottom>
         Trigger Tracking
       </Typography>
@@ -104,7 +109,8 @@ const TrackingForm = ({ defaultData = {}, onSave, hideSaveButton = false }) => {
 TrackingForm.propTypes = {
   defaultData: PropTypes.object,
   onSave: PropTypes.func.isRequired,
-  hideSaveButton: PropTypes.bool
+  hideSaveButton: PropTypes.bool,
+  onSkip: PropTypes.func
 }
 
 export default TrackingForm

@@ -120,20 +120,29 @@ const AppLayout = () => {
                 },
                 // Set label and icon color for selected
                 '& .Mui-selected': {
-                  color: 'secondary.main'
+                  color: 'secondary.light'
+                },
+                '& .Mui-selected .MuiBottomNavigationAction-label': {
+                  fontWeight: 'bold'
                 },
                 '& .Mui-selected .MuiSvgIcon-root': {
-                  color: 'secondary.main'
+                  color: 'primary.light',
+                  backgroundColor: 'secondary.light',
+                  borderRadius: '50%',
+                  padding: '6px'
                 }
               }}
             >
               <BottomNavigationAction
-                label="Home"
                 icon={<Home />}
                 onClick={() => navigate('/')}
+                sx={{
+                  '& .MuiSvgIcon-root': {
+                    fontSize: 40
+                  }
+                }}
               />
               <BottomNavigationAction
-                label="Neue Attacke"
                 icon={<PlusCircle />}
                 onClick={() => navigate('/add-migraine')}
                 // Increase icon
@@ -141,14 +150,18 @@ const AppLayout = () => {
                   mt: -3,
                   height: 70,
                   '& .MuiSvgIcon-root': {
-                    fontSize: 55
+                    fontSize: 70
                   }
                 }}
               />
               <BottomNavigationAction
-                label="Statistik"
                 icon={<Statistics />}
                 onClick={() => navigate('/statistics')}
+                sx={{
+                  '& .MuiSvgIcon-root': {
+                    fontSize: 40
+                  }
+                }}
               />
             </BottomNavigation>
           </Stack>
