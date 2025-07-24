@@ -53,7 +53,14 @@ const TrackingForm = ({ defaultData = {}, onSave, onSkip, hideSaveButton = false
   }, [form, hideSaveButton])
 
   return (
-    <Box sx={{ padding: 2 }}>
+    <Box sx={{
+      padding: 2,
+      scrollbarWidth: 'none',
+      '&::-webkit-scrollbar': {
+        display: 'none'
+      }
+    }}
+    >
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Button variant="contained" onClick={onSkip}>
           Skip

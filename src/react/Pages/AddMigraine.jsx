@@ -16,6 +16,10 @@ const AddMigraine = () => {
         color: theme => theme.palette.text.primary,
         fontFamily: theme => theme.typography.fontFamily,
         overflowY: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+          display: 'none'
+        },
         justifyContent: 'center',
         alignItems: 'center'
       }}

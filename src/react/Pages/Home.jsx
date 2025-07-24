@@ -143,7 +143,11 @@ const Home = () => {
         backgroundColor: theme => theme.palette.background.default,
         color: theme => theme.palette.text.primary,
         fontFamily: theme => theme.typography.fontFamily,
-        overflowY: 'auto'
+        overflowY: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+          display: 'none'
+        }
       }}
     >
       <Typography variant="h4" sx={{ mt: 2, mb: 2 }}>
