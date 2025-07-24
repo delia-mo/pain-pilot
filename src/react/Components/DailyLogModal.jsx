@@ -46,16 +46,17 @@ const DailyLogModal = ({ date, open, onClose, startStep = 0 }) => {
   return (
     <Box
       sx={{
-        position: 'fixed',
+        position: 'absolute',
         inset: 0,
         bgcolor: 'rgba(0,0,0,0.8)',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        padding: 1,
         zIndex: 1300
       }}
     >
-      <Paper sx={{ width: '90%', maxWidth: 400, padding: 2 }}>
+      <Paper sx={{ width: '100%', maxWidth: 400, maxHeight: '100%', overflowY: 'auto', padding: 2, borderRadius: 2, boxSizing: 'border-box' }}>
         {step === 0 && (
           <>
             <Typography variant="h6" gutterBottom>

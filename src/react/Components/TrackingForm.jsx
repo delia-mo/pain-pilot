@@ -77,24 +77,32 @@ const TrackingForm = ({ defaultData = {}, onSave, onSkip, hideSaveButton = false
             onChange={handleChange}
             min={min}
             max={max}
+            sx={{ color: 'white' }}
           />
         </Box>
       ))}
 
       <FormGroup>
-        {['alkohol', 'nikotin'].map((field) => (
-          <FormControlLabel
-            key={field}
-            control={
-              <Checkbox
-                name={field}
-                checked={form[field]}
-                onChange={handleChange}
-              />
-            }
-            label={field.charAt(0).toUpperCase() + field.slice(1)}
-          />
-        ))}
+        <FormControlLabel
+          control={
+            <Checkbox
+              name="alkohol"
+              checked={form.alkohol}
+              onChange={handleChange}
+            />
+          }
+          label="Hast du heute Alkohol konsumiert?"
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              name="nikotin"
+              checked={form.nikotin}
+              onChange={handleChange}
+            />
+        }
+          label="Hast du heute Nikotin konsumiert?"
+        />
       </FormGroup>
 
       {!hideSaveButton && (

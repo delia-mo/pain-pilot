@@ -45,7 +45,7 @@ const MigraineForm = ({ defaultData = {}, onSave, onSkip, hideSaveButton = false
     <Box sx={{ padding: 2 }}>
       {!hideSaveButton && (
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Button variant="outlined" onClick={onSkip}>
+          <Button variant="contained" onClick={onSkip}>
             Skip
           </Button>
         </Box>
@@ -67,6 +67,7 @@ const MigraineForm = ({ defaultData = {}, onSave, onSkip, hideSaveButton = false
           onChange={handleChange}
           min={0}
           max={10}
+          sx={{ color: 'white' }}
         />
       </Box>
 
