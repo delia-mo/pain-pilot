@@ -92,7 +92,7 @@ const Home = () => {
 
   useEffect(() => {
     const keys = Object.keys(localStorage)
-    const activeKey = keys.find(k => k.startsWith('migraine-') && localStorage.getItem(k)?.includes('"active":true'))
+    const activeKey = keys.find(k => k.startsWith('migraine-') && localStorage.getItem(k)?.includes('"active":false'))
 
     if (activeKey) {
       const date = activeKey.split('migraine-')[1]

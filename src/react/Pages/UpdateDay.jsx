@@ -27,11 +27,29 @@ const UpdateDay = () => {
 
   const handleSave = () => {
     const status = calculateStatus(migraineData.schmerzen ?? 0)
-    const fullMigraine = { ...migraineData, date, status }
-    const fullTracking = { ...trackingData, date }
 
-    localStorage.setItem(`migraine-${date}`, JSON.stringify(fullMigraine))
+    const fullTracking = { ...trackingData, date }
     localStorage.setItem(`tracking-${date}`, JSON.stringify(fullTracking))
+
+    const defaultMigraine = {
+      schmerzen: 0,
+      aura: false,
+      uebelkeit: false,
+      taubheit: false,
+      sprechen: false,
+      muskel: false,
+      active: false,
+      dauer: 1
+    }
+
+    const isMigraineChanged = Object.keys(defaultMigraine).some(
+      key => migraineData[key] !== defaultMigraine[key]
+    )
+
+    if (isMigraineChanged) {
+      const fullMigraine = { ...migraineData, date, status }
+      localStorage.setItem(`migraine-${date}`, JSON.stringify(fullMigraine))
+    }
 
     navigate('/')
   }
