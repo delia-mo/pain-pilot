@@ -46,7 +46,11 @@ const UpdateDay = () => {
         py: 4,
         px: 2,
         height: '100vh',
-        overflowY: 'auto'
+        overflowY: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+          display: 'none'
+        }
       }}
     >
       <Typography variant="h5" align="center">
