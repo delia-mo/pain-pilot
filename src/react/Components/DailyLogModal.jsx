@@ -37,6 +37,24 @@ const DailyLogModal = ({ date, open, onClose, startStep = 0 }) => {
     const fullData = { ...data, date }
     localStorage.setItem(`tracking-${date}`, JSON.stringify(fullData))
     setTrackingData(fullData)
+
+    const migraineKey = (`migraine-${date}`)
+    const existingMigraine = JSON.parse(localStorage.getItem(migraineKey) || 'null')
+
+    const status = calculateStatus(fullData, existingMigraine || undefined)
+
+    if (existingMigraine) {
+      const loggingWithStatus = {
+        ...existingMigraine,
+        status
+      }
+      localStorage.setItem(migraineKey, JSON.stringify(loggingWithStatus))
+    } else {
+      const newLogging = {
+        status
+      }
+      localStorage.setItem(migraineKey, JSON.stringify(newLogging))
+    }
     onClose()
     navigate('/')
   }
