@@ -3,8 +3,9 @@ import useTriggerLabels from './useTriggerLabels'
 
 const useTrackingAnalysis = () => {
   const { loggings, trackings } = useMigrainData()
-  const migraineDates = new Set(loggings.map(entry => entry.date))
 
+  // Filtert Tage mit Migräne
+  const migraineDates = new Set(loggings.map(entry => entry.date))
   const trackingWithMigraine = trackings.filter(entry => migraineDates.has(entry.date))
   const trackingWithoutMigraine = trackings.filter(entry => !migraineDates.has(entry.date))
 
@@ -13,6 +14,7 @@ const useTrackingAnalysis = () => {
     return values.length ? values.reduce((a, b) => a + b, 0) / values.length : undefined
   }
 
+  // Berechnet Differenz, unterschiedlich je nach Skalierung der Symptome
   const getDiff = (withVal, withoutVal, reverse = false) => (reverse ? withoutVal - withVal : withVal - withoutVal)
 
   const reversedScale = {
@@ -25,14 +27,15 @@ const useTrackingAnalysis = () => {
   }
 
   const triggerLabels = useTriggerLabels()
+  // Setzt Objekt zusammen aus dem key, dem label und bool: reverse
   const factors = Object.keys(triggerLabels)
-    .filter(key => Object.prototype.hasOwnProperty.call(reversedScale, key))
     .map(key => ({
       key,
       name: triggerLabels[key],
       reverse: reversedScale[key]
     }))
 
+  // Analysiert die Factors und berechnet für alle Durchschnitte mit / ohne Migräne und DIfferenz
   const analysis = factors.map(factor => {
     const avgWith = avg(trackingWithMigraine, factor.key)
     const avgWithout = avg(trackingWithoutMigraine, factor.key)
@@ -40,12 +43,13 @@ const useTrackingAnalysis = () => {
     return { ...factor, avgWith, avgWithout, diff }
   })
 
+  // Filtert die relevantesten Trigger
   const topTriggers = analysis
     .filter(a => a.diff > 0.1)
     .sort((a, b) => b.diff - a.diff)
 
+  // Zählt wie häufig die relevanten Trigger vorkommen
   const triggerCounts = {}
-
   const topTriggerKeys = topTriggers.map(trigger => trigger.key)
   trackingWithMigraine.forEach(entry => {
     topTriggerKeys.forEach(trigger => {

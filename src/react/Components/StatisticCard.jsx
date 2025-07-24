@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Grid2, Paper, Typography } from '@mui/material'
 
+// Definiert eine "Karte" auf der ein Element der Statistik steht
 const StatisticCard = ({ title, value }) => (
   <Grid2>
     <Paper

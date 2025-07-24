@@ -28,6 +28,7 @@ const Statistics = () => {
   const currentMonth = new Date().getMonth()
   const currentMonthName = months[currentMonth]
 
+  // Definiert Daten, die im Diagramm stehen sollen
   const chartData = Object.entries(triggerCounts).map(([key, count]) => ({
     name: triggerLabels[key] || key,
     count
