@@ -47,7 +47,10 @@ const DailyLogModal = ({ date, open, onClose, startStep = 0 }) => {
     <Box
       sx={{
         position: 'absolute',
-        inset: 0,
+        top: '5vh',
+        bottom: '5vh',
+        left: '0',
+        right: '0',
         bgcolor: 'rgba(0,0,0,0.8)',
         display: 'flex',
         justifyContent: 'center',
