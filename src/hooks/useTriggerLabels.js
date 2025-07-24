@@ -1,11 +1,11 @@
 const useTriggerLabels = () => ({
-  alohol: 'Alkoholkonsum',
-  hydration: 'Flüssigkeitszufuhr',
+  alkohol: 'Alkoholkonsum',
+  hydration: 'Dehydrierung',
   meals: 'Mahlzeiten',
   nikotin: 'Nikotinkonsum',
   psychisch: 'Mentale Verfassung',
-  reize: 'Reizintensität',
+  reize: 'Überreizung',
   schlaf: 'Schlafdauer',
-  stress: 'Stresslevel'
+  stress: 'Viel Stress'
 })
 export default useTriggerLabels
