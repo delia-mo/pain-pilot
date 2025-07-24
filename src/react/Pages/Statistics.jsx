@@ -63,7 +63,11 @@ const Statistics = () => {
         backgroundColor: theme.palette.background.default,
         color: theme.palette.text.primary,
         fontFamily: theme.typography.fontFamily,
-        overflowY: 'auto'
+        overflowY: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+          display: 'none'
+        }
       }}
     >
       <Typography variant="h4" gutterBottom>Migräne Statistik</Typography>
