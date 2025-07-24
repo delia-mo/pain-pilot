@@ -3,6 +3,7 @@ const useSymptomLabels = () => ({
   aura: 'Aura',
   uebelkeit: 'Übelkeit',
   taubheit: 'Kribbeln oder Taubheit',
-  muskel: 'Muskelschwäche oder Zittern'
+  muskel: 'Muskelschwäche oder Zittern',
+  sprechen: 'Schwierigkeiten beim Sprechen'
 })
 export default useSymptomLabels

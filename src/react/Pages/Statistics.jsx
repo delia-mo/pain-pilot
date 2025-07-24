@@ -6,47 +6,27 @@ import { useTheme } from '@mui/material/styles'
 import StatisticCard from '../Components/StatisticCard'
 
 import useMigraineAnalysis from '../../hooks/useMigraineAnalysis'
-import useMigraineData from '../../hooks/useMigraineData'
 import useMonthLabels from '../../hooks/useMonthLabels'
-import useSymptomLabels from '../../hooks/useSymptomLabels'
 import useTrackingAnalysis from '../../hooks/useTrackingAnalysis'
 import useTriggerLabels from '../../hooks/useTriggerLabels'
 
 const Statistics = () => {
-  const { loggings } = useMigraineData()
-  const symptomFields = ['schmerzen', 'aura', 'uebelkeit', 'taubheit', 'sprechen', 'muskel']
-  const loggingsWithMigraine = loggings.filter(entry => symptomFields.some(field => field in entry))
-  const currentMonth = new Date().getMonth()
-  const migraineDaysMonth = loggingsWithMigraine.filter(e => new Date(e.date).getMonth() === currentMonth)
-  const lastMigraineDate = [...loggingsWithMigraine].sort((a, b) => new Date(b.date) - new Date(a.date))[0]?.date
-  // Abrunden zum vollen Tag. Berechnung: Millisekunden * Sekunden * Minuten * Stunden für einen Tag
-  const daysSinceMigraine = lastMigraineDate ? Math.floor((Date.now() - new Date(lastMigraineDate)) / (1000 * 60 * 60 * 24)) : '-'
-  const avgPain = loggingsWithMigraine.length ? (loggingsWithMigraine.reduce((sum, entry) => sum + (entry.schmerzen || 0), 0) / loggingsWithMigraine.length).toFixed(1) : 0
-  const { avgMigraineDaysPerMonth } = useMigraineAnalysis()
-
-  const symptomLabels = useSymptomLabels()
-  const months = useMonthLabels()
-  const theme = useTheme()
-  const triggerLabels = useTriggerLabels()
-  const currentMonthName = months[currentMonth]
-
-  const symptomCounts = {}
-  loggingsWithMigraine.forEach(entry => {
-    Object.keys(symptomLabels).forEach(symptom => {
-      if (entry[symptom]) {
-        symptomCounts[symptom] = (symptomCounts[symptom] || 0) + 1
-      }
-    })
-  })
-  const topSymptoms = Object.entries(symptomCounts)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 3)
-    .map(([key, count]) => ({
-      name: symptomLabels[key] || key,
-      count
-    }))
+  const {
+    topSymptoms,
+    avgPain,
+    daysSinceLastAttack,
+    migraineDaysMonth,
+    avgMigraineDaysPerMonth
+  } = useMigraineAnalysis()
 
   const { topTriggers, triggerCounts } = useTrackingAnalysis()
+  const triggerLabels = useTriggerLabels()
+  const theme = useTheme()
+
+  // Name des aktuellen Monats
+  const months = useMonthLabels()
+  const currentMonth = new Date().getMonth()
+  const currentMonthName = months[currentMonth]
 
   const chartData = Object.entries(triggerCounts).map(([key, count]) => ({
     name: triggerLabels[key] || key,
@@ -79,7 +59,7 @@ const Statistics = () => {
           <StatisticCard title="Ø Migräne-Tage / Monat" value={avgMigraineDaysPerMonth} />
         </Grid2>
         <Grid2 size={{ xs: 6 }}>
-          <StatisticCard title="Tage seit letzter Attacke" value={daysSinceMigraine} />
+          <StatisticCard title="Tage seit letzter Attacke" value={daysSinceLastAttack} />
           <StatisticCard title="Ø Schmerzstärke" value={avgPain} />
         </Grid2>
       </Grid2>
