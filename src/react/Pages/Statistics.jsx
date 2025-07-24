@@ -5,6 +5,7 @@ import { useTheme } from '@mui/material/styles'
 
 import StatisticCard from '../Components/StatisticCard'
 
+import useMigraineAnalysis from '../../hooks/useMigraineAnalysis'
 import useMigraineData from '../../hooks/useMigraineData'
 import useMonthLabels from '../../hooks/useMonthLabels'
 import useSymptomLabels from '../../hooks/useSymptomLabels'
@@ -21,6 +22,7 @@ const Statistics = () => {
   // Abrunden zum vollen Tag. Berechnung: Millisekunden * Sekunden * Minuten * Stunden für einen Tag
   const daysSinceMigraine = lastMigraineDate ? Math.floor((Date.now() - new Date(lastMigraineDate)) / (1000 * 60 * 60 * 24)) : '-'
   const avgPain = loggingsWithMigraine.length ? (loggingsWithMigraine.reduce((sum, entry) => sum + (entry.schmerzen || 0), 0) / loggingsWithMigraine.length).toFixed(1) : 0
+  const { avgMigraineDaysPerMonth } = useMigraineAnalysis()
 
   const symptomLabels = useSymptomLabels()
   const months = useMonthLabels()
@@ -70,7 +72,7 @@ const Statistics = () => {
       <Grid2 container spacing={1}>
         <Grid2 size={{ xs: 6 }}>
           <StatisticCard title={`Migräne-Tage ${currentMonthName}`} value={migraineDaysMonth.length} />
-          <StatisticCard title="Ø Migräne-Tage / Monat" value={migraineDaysMonth.length} />
+          <StatisticCard title="Ø Migräne-Tage / Monat" value={avgMigraineDaysPerMonth} />
         </Grid2>
         <Grid2 size={{ xs: 6 }}>
           <StatisticCard title="Tage seit letzter Attacke" value={daysSinceMigraine} />
@@ -88,11 +90,14 @@ const Statistics = () => {
       >
         <Typography variant="h6">Häufigste Trigger</Typography>
         {topTriggers.length > 0 ? (
-          <ResponsiveContainer width="100%" height={Math.max(chartData.length * 40, 200)} margin={{ top: 10, bottom: 0, left: 0, right: 10 }}>
+          <ResponsiveContainer
+            width="100%"
+            height={Math.max(chartData.length * 40, 200)}
+          >
             <BarChart
               layout="vertical"
               data={chartData}
-              margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+              margin={{ top: 10, right: 20, left: 0, bottom: 0 }}
             >
               <XAxis
                 type="number"
