@@ -319,6 +319,16 @@ const Home = () => {
               size="small"
               sx={{ flex: 0.5 }}
               onClick={() => {
+                const migraineKey = `migraine-${activeMigraineDate}`
+                const stored = localStorage.getItem(migraineKey)
+                console.log(stored)
+
+                if (stored) {
+                  const parsed = JSON.parse(stored)
+                  parsed.active = false
+                  localStorage.setItem(migraineKey, JSON.stringify(parsed))
+                  console.log(parsed)
+                }
                 setShowMigraineActiveDialog(false)
                 navigate(`/updateDay/${activeMigraineDate}`)
               }}
