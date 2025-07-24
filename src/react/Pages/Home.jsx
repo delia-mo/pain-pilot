@@ -15,6 +15,7 @@ import CloseIcon from '@mui/icons-material/Close'
 
 import { useNavigate } from 'react-router'
 
+import useConfig from '../../hooks/useConfig'
 import { DateContext } from '../Context/DateContext'
 import DayCard from '../Components/Home/DayCard'
 import DailyLogModal from '../Components/DailyLogModal'
@@ -103,12 +104,18 @@ const Home = () => {
   // wetter
   const [weatherData, setWeatherData] = useState(null)
   const [weatherWarning, setWeatherWarning] = useState(null)
+  const config = useConfig()
 
   useEffect(() => {
+    if (!config || !config.weatherAPIUrl) {
+      console.log('No config')
+      return
+    }
+
     const fetchWeather = async () => {
       try {
         const response = await fetch(
-          'https://api.openweathermap.org/data/2.5/weather?lat=52.52&lon=13.405&appid=cbd90dceaef7999eddcc126de6448bf8&units=metric&lang=de'
+          config.weatherAPIUrl
         )
         const data = await response.json()
         setWeatherData(data)
@@ -125,7 +132,7 @@ const Home = () => {
     }
 
     fetchWeather()
-  }, [])
+  }, [config])
 
   return (
     <Stack

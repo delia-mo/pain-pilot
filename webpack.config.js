@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url'
 import { createRequire } from 'module'
 
 import webpack from 'webpack'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import FaviconsWebpackPlugin from 'favicons-webpack-plugin'
@@ -49,6 +50,11 @@ const plugins = [
         // windows: true // Create Windows 8 tile icons. `boolean` or `{ offset, background }` or an array of sources
       }
     }
+  }),
+  new CopyWebpackPlugin({
+    patterns: [
+      { from: 'public', to: '.' }
+    ]
   })
 ]
 
