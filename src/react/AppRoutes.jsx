@@ -11,8 +11,6 @@ import Error404 from './Pages/Error404'
 import Settings from './Pages/Settings'
 import Statistics from './Pages/Statistics'
 import TemplateScreen from './Pages/TemplateScreen'
-import MigrainLog from './Pages/MigrainLog'
-import Tracking from './Pages/Tracking'
 import UpdateDay from './Pages/UpdateDay'
 import HandleData from './Pages/HandleData'
 
@@ -31,8 +29,6 @@ const AppRoute = () => {
         <Route path="/template" element={<TemplateScreen />} />
         <Route path="/statistics" element={<Statistics />} />
         <Route path="/add-migraine" element={<AddMigraine />} />
-        <Route path="/migrainLog" element={<MigrainLog />} />
-        <Route path="/tracking" element={<Tracking />} />
         <Route path="/updateDay/:date" element={<UpdateDay />} />
         <Route path="/handle-data" element={<HandleData />} />
         <Route path="*" element={<Error404 />} />

@@ -27,7 +27,8 @@ const DailyLogModal = ({ date, open, onClose, startStep = 0 }) => {
   const handleSaveMigraine = (data) => {
     const fullData = { ...data, date }
     const status = calculateStatus(trackingData, fullData)
-    const fullWithStatus = { ...fullData, status }
+    const active = true
+    const fullWithStatus = { ...fullData, status, active }
     localStorage.setItem(`migraine-${date}`, JSON.stringify(fullWithStatus))
     setMigraineData(fullWithStatus)
     setStep(2)
