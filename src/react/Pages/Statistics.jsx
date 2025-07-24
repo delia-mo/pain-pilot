@@ -13,13 +13,14 @@ import useTriggerLabels from '../../hooks/useTriggerLabels'
 
 const Statistics = () => {
   const { loggings } = useMigraineData()
+  const symptomFields = ['schmerzen', 'aura', 'uebelkeit', 'taubheit', 'sprechen', 'muskel']
+  const loggingsWithMigraine = loggings.filter(entry => symptomFields.some(field => field in entry))
   const currentMonth = new Date().getMonth()
-  const migraineDays = loggings.filter(e => new Date(e.date).getMonth() === currentMonth)
-  const lastMigraineDate = [...loggings].sort((a, b) => new Date(b.date) - new Date(a.date))[0]?.date
+  const migraineDaysMonth = loggingsWithMigraine.filter(e => new Date(e.date).getMonth() === currentMonth)
+  const lastMigraineDate = [...loggingsWithMigraine].sort((a, b) => new Date(b.date) - new Date(a.date))[0]?.date
   // Abrunden zum vollen Tag. Berechnung: Millisekunden * Sekunden * Minuten * Stunden für einen Tag
   const daysSinceMigraine = lastMigraineDate ? Math.floor((Date.now() - new Date(lastMigraineDate)) / (1000 * 60 * 60 * 24)) : '-'
-
-  const avgPain = loggings.length ? (loggings.reduce((sum, entry) => sum + (entry.schmerzen || 0), 0) / loggings.length).toFixed(1) : 0
+  const avgPain = loggingsWithMigraine.length ? (loggingsWithMigraine.reduce((sum, entry) => sum + (entry.schmerzen || 0), 0) / loggingsWithMigraine.length).toFixed(1) : 0
 
   const symptomLabels = useSymptomLabels()
   const months = useMonthLabels()
@@ -28,7 +29,7 @@ const Statistics = () => {
   const currentMonthName = months[currentMonth]
 
   const symptomCounts = {}
-  loggings.forEach(entry => {
+  loggingsWithMigraine.forEach(entry => {
     Object.keys(symptomLabels).forEach(symptom => {
       if (entry[symptom]) {
         symptomCounts[symptom] = (symptomCounts[symptom] || 0) + 1
@@ -68,8 +69,8 @@ const Statistics = () => {
       {/* Überblick */}
       <Grid2 container spacing={1}>
         <Grid2 size={{ xs: 6 }}>
-          <StatisticCard title={`Migräne-Tage ${currentMonthName}`} value={migraineDays.length} />
-          <StatisticCard title="Ø Migräne-Tage / Monat" value={migraineDays.length} />
+          <StatisticCard title={`Migräne-Tage ${currentMonthName}`} value={migraineDaysMonth.length} />
+          <StatisticCard title="Ø Migräne-Tage / Monat" value={migraineDaysMonth.length} />
         </Grid2>
         <Grid2 size={{ xs: 6 }}>
           <StatisticCard title="Tage seit letzter Attacke" value={daysSinceMigraine} />
